@@ -22,7 +22,7 @@
     <body>
         <div id="content">
         	<h1>Home of UoS3</h1>
-        	<p>Hi, I am a production server.</p>
+        	<p>Hi, I am a commit on master.</p>
         </div>
     </body>
 </html>
