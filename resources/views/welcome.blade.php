@@ -22,7 +22,7 @@
     <body>
         <div id="content">
         	<h1>Home of UoS3</h1>
-        	<p>Hi, I am a staging server.</p>
+        	<p>Hi, I am a production server.</p>
         </div>
     </body>
 </html>
