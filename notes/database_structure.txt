@@ -1,34 +1,37 @@
 Database Structure
 ==================
 
-1. submits
-----------
-* ID
+submits
+-------
+* submit_id
 * timestamp (uploaded)
-* submitter IP
-* user ID (users automatically generated per-IP in v1; in v2+ identified by a key entered by the user in the Java app) 
-
+* user_id (users automatically generated per-IP in v1; in v2+ identified by a key entered by the user in the Java app) 
 * timestamp (from SDR)
-* gyro
-* accelerometer
 * temperature
-* GNSS
-* magnetometer
+* gyro_x
+* gyro_y
+* gyro_z
+* accelerometer_x
+* accelerometer_y
+* accelerometer_z
+* (gnss values as columns: 7)
+* magnetometer values as columns: 3)
 
-2. users
+
+users
 --------
 
 v1
 --
-* ID
-* IP
+* user_id
+* ip
 * blocked (default: 0)
 
 v2
 --
 + username
-+ email address
-+ submit key
++ email
++ submit_key
 (blah blah profile data)
 + status (public|private|deleted)
 
