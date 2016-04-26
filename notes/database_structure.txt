@@ -1,0 +1,35 @@
+Database Structure
+==================
+
+1. submits
+----------
+* ID
+* timestamp (uploaded)
+* submitter IP
+* user ID (users automatically generated per-IP in v1; in v2+ identified by a key entered by the user in the Java app) 
+
+* timestamp (from SDR)
+* gyro
+* accelerometer
+* temperature
+* GNSS
+* magnetometer
+
+2. users
+--------
+
+v1
+--
+* ID
+* IP
+* blocked (default: 0)
+
+v2
+--
++ username
++ email address
++ submit key
+(blah blah profile data)
++ status (public|private|deleted)
+
+

@@ -1,0 +1,29 @@
+Website functionality
+=====================
+
+v1
+
+* display static pages with info
+* receive uploads from Java SDR plugin and save them to database
+* generate a page with minimal stats
+
+--------------------------------
+v2
+
++ show data visualisations (cool stuff)
+
+--------------------------------
+v3
+
++ identify uploaders
++ show "high scores" of uploaders
++ display "user profile" with upload stats for a user
++ enable modification of user profile (what is displayed, decription, affiliation?)
++ enable administration of users (block user from uploading, remove user from high scores)
+
+--------------------------------
+v4
+
++ enable polling for current data through a REST API
++ allow many-to-many user communication (=forum)
++ allow one-to-one user communication (PM system)
