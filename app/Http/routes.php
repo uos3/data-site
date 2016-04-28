@@ -18,6 +18,7 @@ Route::get('/', function () {
 */
 
 Route::get('/','PagesController@welcome');
+
 Route::get('/hello','PagesController@hello');
 
 

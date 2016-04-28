@@ -15,7 +15,7 @@ class PagesController extends Controller {
 	}
 	
 	
-	public function welcome() {
+	public function hello() {
 		return 'hello';
 	}
 	
