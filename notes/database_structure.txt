@@ -1,12 +1,12 @@
 Database Structure
 ==================
 
-submits
+submissions
 -------
-* submit_id
-* timestamp (uploaded)
+* id
+* uploaded_at
 * user_id (users automatically generated per-IP in v1; in v2+ identified by a key entered by the user in the Java app) 
-* timestamp (from SDR)
+* cubesat_time
 * temperature
 * gyro_x
 * gyro_y
@@ -22,8 +22,8 @@ users
 
 v1
 --
-* user_id
-* ip
+* id
+* ip_address
 * blocked (default: 0)
 
 v2
