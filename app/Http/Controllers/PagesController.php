@@ -14,11 +14,6 @@ class PagesController extends Controller {
 		return 'welcome page';
 	}
 	
-	
-	public function hello() {
-		return 'hello';
-	}
-	
 	public function about() {
 		return view('about')->with("version",'<strong style="color:red">1</strong>');
 	}
