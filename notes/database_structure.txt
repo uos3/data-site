@@ -17,7 +17,6 @@ submits
 * (gnss values as columns: 7)
 * magnetometer values as columns: 3)
 
-
 users
 --------
 
