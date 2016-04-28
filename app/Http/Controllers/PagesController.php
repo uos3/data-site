@@ -9,6 +9,11 @@ class PagesController extends Controller {
 		$this->middleware('guest');
 	}
 	
+	
+	public function welcome() {
+		return 'welcome page';
+	}
+	
 	public function about() {
 		return view('about')->with("version",'<strong style="color:red">1</strong>');
 	}
