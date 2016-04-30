@@ -24,6 +24,7 @@ class CreateSubmissionsTable extends Migration
 			$table->float('accelerometer_x');
 			$table->float('accelerometer_y');
 			$table->float('accelerometer_z');
+			//TODO: reference to image uploads? filename? just a flag that image was uploaded?
 			//TODO: GNSS values columns?
 			//TODO: magnetometer values columns?
         });

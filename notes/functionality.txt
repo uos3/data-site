@@ -5,6 +5,7 @@ v1
 
 * display static pages with info
 * receive uploads from Java SDR plugin and save them to database
+* receive the image part from the Java SDR plugin and create it as a file on disk
 * generate a page with minimal stats
 
 --------------------------------
