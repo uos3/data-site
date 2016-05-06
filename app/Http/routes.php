@@ -14,3 +14,12 @@
 Route::get('/','PagesController@welcome');
 
 Route::get('about','PagesController@about');
+
+Route::get('submit',['as'=>'submit','uses'=>'PagesController@submit']);
+
+Route::post('data/submit','DataController@submit');
+
+Route::get('data/submit','DataController@redirect');
+
+//Route::get('api','ApiController'); //this registers a group of endpoints - one for each controller method
+
