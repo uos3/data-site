@@ -33,9 +33,10 @@ class DataController extends Controller
 		 return('yes');
     }
 	
-	
+	/**
+	 * Redirects to info page if url is accessed with GET verb. 
+	 */
 	public function redirect() {
 		return redirect()->route('submit');
-		#return redirect()->action('PagesController@submit');
 	}
 }
