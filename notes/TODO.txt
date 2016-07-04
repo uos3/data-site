@@ -1,0 +1,20 @@
+TODO
+====
+
+* finish data submission into db (DataController)
+	- finish unit test case for blocked user
+	- use temp db (Sqlite?) for testing
+	- submit data to db
+	
+* design homepage
+	- look at moodboard: do you still like this?
+	- ask: will this work with my own art ideas?
+	- brainstorm ideas: layout
+	- brainstorm ideas: colors + style
+	- try out things in Gimp/Inkscape
+	
+* list 'art' ideas (or find them - I have a couple noted down... somewhere...)
+
+* design other static pages
+	- take homepage design and pare it down for text
+	
