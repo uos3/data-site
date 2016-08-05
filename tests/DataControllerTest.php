@@ -4,6 +4,8 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+use App\User;
+
 class DataControllerTest extends TestCase
 {
     /**
@@ -37,13 +39,19 @@ class DataControllerTest extends TestCase
      *	@return void
      */
 	public function testSubmitBlockedUser() {
-			
-		//get user by IP (127.0.0.1), block them
+		
+		//temporarily block localhost
+		$user = User::where('ip_address','127.0.0.1')->first();
+		$user->update(['blocked' => 1]);
 		
 		$response = $this->call('POST','data/submit',['app_key'=>'OTe7K69Plj0nAFgX91sAszl2txy9TobF','cubesat_time'=>Carbon\Carbon::now(),'uploaded_at'=>Carbon\Carbon::now()]);
 		//curl -v -s -i -d "app_key=OTe7K69Plj0nAFgX91sAszl2txy9TobF" "http://cubehome_local/data/submit" 1> /dev/null
 		
-		//unblock user!
+		$this->assertEquals('403',$response->status());
+		$this->see('Access denied.');
+		
+		$user->update(['blocked' => 0]);
+		//unblock user again!
 	}
 	
 	/**
@@ -61,5 +69,10 @@ class DataControllerTest extends TestCase
 	public function testRedirect() {
 		$this->get('data/submit')
 			->assertRedirectedToRoute('submit');
+			
+		//$this->markTestIncomplete('unfinished');
+		//$this->markedTestSkipped('not now');
 	}
+	
+	
 }

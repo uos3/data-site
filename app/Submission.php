@@ -26,4 +26,17 @@ class Submission extends Model
 	];
 	
 	public $timestamps = false; //needed because I'm not using the default timestamp columns (updated_at, created_at), and otherwise php artisan tinker craps itself.
+	
+	public static $validation_rules = [
+		'uploaded_at' => 'required|date_format:Y-m-d H:i:s',
+		'user_id' => 'required|integer|exists:users,id',
+		'cubesat_time' => 'date_format:Y-m-d H:i:s',
+		'temperature' => 'numeric',
+		'gyro_x' => 'numeric',
+		'gyro_y' => 'numeric',
+		'gyro_z' => 'numeric',
+		'accelerometer_x' => 'numeric',
+		'accelerometer_y' => 'numeric',
+		'accelerometer_z' => 'numeric',
+	];
 }

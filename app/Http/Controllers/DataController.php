@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Submission;
 use App\User;
 use App\Http\Requests;
+use Carbon\Carbon;
+use Validator;
 //use Request;
 
 class DataController extends Controller
@@ -17,8 +19,7 @@ class DataController extends Controller
     //
     
     public function submit(Request $request) {
-		
-		//if submission's api key isn't correct, abort.
+    	//if submission's api key isn't correct, abort.
 		
 		//error_log("says appkey is this: ".$request->app_key);
 		//error_log("env appkey is this: ".env('APP_KEY'));
@@ -40,73 +41,27 @@ class DataController extends Controller
 		
 		//check if user isn't blocked		
 		if ($user->blocked) {
-			abort(403); //lolnope.
+			abort(403, 'Access denied.'); //lolnope.
 		}
 		
-		//gather data
-		$data = [];
+		//build the data array from $request
+		$data = $request->all();
 		
-		/**
-		$data['cubesat_time'] = $request->cubesat_time; //check if it's... time-y?
+		//add computed values
+		$data['uploaded_at'] = Carbon::now()->toDateTimeString();
 		$data['user_id'] = $user->id;
 		
-		//cubesat data. will change. TODO sanity/validity checks for everything.
-		$data['temperature'] = $request->temperature;  
-		$data['gyro_x'] = $request->gyro_x;
-		$data['gyro_y'] = $request->gyro_y;
-		$data['gyro_z'] = $request->gyro_z;
-		$data['accelerometer_x'] = $request->accelerometer_x;
-		$data['accelerometer_y'] = $request->accelerometer_y;
-		$data['accelerometer_z'] = $request->accelerometer_z;
+		//validate
+		$validator = Validator::make($data,Submission::$validation_rules);
 		
-		 */
-		//$submission = new Submission($data);
-		//$submission->save();
-		
-		return "Success.";
-		
-		
-		
-		/**
-		 * get ip
-check if ip in user db
-no: create user, get id
-yes: check if user banned
-	yes: abort
-	no: get user id
-		 */
-
-
-		//check if ip not in banlist
-		
-		//check if ip in user table
-		
-		//yes: get user id
-		
-		//no: create new user AND get id
-		
-		//get data
-		
-		//check if valid (numbers, floats, etc.)
-		
-		//yes: put into db
-		
-		//no: abort
-		
-		/*
-		 * app sends POST data through specific url
-		 * check if the APP KEY is correct (app key is embedded in the Java app)
-		 * 
-		 * if yes:
-		 * 	submit data to db (VALIDATE)
-		 * 	return something to notify success (id of submission? date uploaded? ??)
-		 * 	if they don't pass validation: return error 
-		 * 
-		 * if no:
-		 * 	return error
-		 * 
-		 * 
-		 */ 
+		if ($validator->fails()) {
+			$errors = $validator->errors()->all();
+			return "Failure. ".implode(' ', $errors)."\n";
+		} else {
+			$submission = new Submission($data);
+			$submission->save();
+			return "Success.";
+		}
     }
 	
 	/**
