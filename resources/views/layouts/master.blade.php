@@ -8,20 +8,34 @@
         <link rel="stylesheet" href="{{ elixir("css/app.css") }}">
     </head>
     <style>
+    html {
+    	padding:0;
+    	margin:0;
+    	height:100%;
+    }
     	body {
-    		
+    		padding:0;
+    		margin:0;
     		width:100%;
+    		height:100%;
     	}
     	
     	#wrapper {
+    		position:relative;
     		margin:0 auto;
     		max-width:72em;  
-    		padding:0 1em;  		
+    		padding:0 1em; 
+    		min-height: 100%;    				
     	}
+    	.content {
+			padding-bottom:4.5em;
+			
+		  }
     	
     	header {
     		width:100%;
     		margin-top:1em;
+    		margin-bottom:1em;
     	}
     	
     	header * {
@@ -49,19 +63,20 @@
     		color:#E72E4F;
     		text-decoration:none;
     	}
-    	
-    	a:hover, a:active, a:focus {
-    		color:rgb(42, 193, 225);    		
-    	}
-    	
     	a:visited {
     		color:rgb(143, 35, 77);
     		color:rgb(236, 100, 124);
     		color:#AD6370;
     	}
     	
-    	nav {
-    		margin-top:1em;
+    	a:hover, a:active, a:focus {
+    		color:rgb(42, 193, 225);    		
+    	}  	
+    	
+    	
+    	nav {   
+    		line-height:2em;
+    		 		
     	}
     	
     	nav ul {
@@ -82,12 +97,32 @@
     	}
     	
     	nav ul li a:hover, nav ul li a:active, nav ul li a:focus{
-    		background-color:#C02A45;
-    		color:#071E24;
+    		background-color: rgba(192, 42, 69, 0.27);
+    		color:#E72E4F;
     	}
     	#search-form {
-    		float:right;    		
+    		float:right;  
+    		line-height:1.5em;
+    		padding:0.3em 0em 0.3em 1em;  		
     	}
+    	
+    	footer {
+    		height:4.5em;
+    		font-size:0.8em;
+    		border-top:1px solid #007B91;
+    		padding:1em 0;
+    		position:absolute;
+    		bottom:1px;
+    	}
+    	
+    	
+    	
+    /*	@media less than x:
+     * 
+     * search-form should go on its own line
+     * menu should have less items: About, Data, Contribute
+     * 
+     * */
     	
     	.content {
     		padding-top:1.5em;
@@ -98,7 +133,7 @@
         <div id="wrapper">
         	<header>
         		<div class="user-area">
-        			<a href="#" class="login-link">Login | Register</a>
+        			<a href="#" class="login-link">Login</a> | <a href="#" class="register-link">Register</a>
         		</div>        		
         	<h1 class="logo"><img src="/img/uos3-logo-full.png"></h1>
         	<!--
@@ -142,7 +177,7 @@
 	        	@yield('content')        		
         	</div>
         	<footer>
-        		
+        	<p>© 2016 UoS³. All Rights Reserved.</p>
         	</footer>
 
         	
