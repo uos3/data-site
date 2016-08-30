@@ -4,3 +4,7 @@
 
 @section('content')
 	
+<div class="content">   
+	<p class="shout">SCIENCE!</p>     		        		
+</div>
+@endsection
