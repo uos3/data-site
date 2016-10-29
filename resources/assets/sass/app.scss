@@ -1,4 +1,4 @@
-// @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
 
 /****** RESETS *******/
@@ -29,16 +29,23 @@ body {
 
 /***** LAYOUT *****/
 
-body {
-  color:#eee;
-}
 
-html { 
-  background: url(/img/from_blue_watercolor_wide_1920x1080.png) no-repeat center center fixed; 
+body { 
+  background: url(/img/from_blue_watercolor_wide_1920x1080.png) #041216 no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  color:#cadfe7;     
+}
+
+  #wrapper {
+  position:relative;
+  margin:0 5em;
+  //max-width:72em;  
+  padding: 0 0 5em 0; /* child elements with margins bleed out of the parent elements. ahahahaha. */
+  min-height: 100%;
+  
 }
 
 //

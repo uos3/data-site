@@ -2,17 +2,14 @@
 <html>
     <head>
         <title>University of Southampton Small Satelite{{ isset($title) ? " -- ".$title : '' }}</title>
-        
-
-		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+        <link rel="stylesheet" href="{{ elixir("css/app.css") }}">
 		<link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Raleway|Roboto+Condensed" rel="stylesheet"> <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Raleway|Roboto+Condensed" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Anaheim|Carrois+Gothic" rel="stylesheet">     
 		<meta name="robots" content="noindex">
         
     </head>
     <style>
-    
-		html {
+    	html {
 			box-sizing:border-box;
 			height: 100%;
 			padding:0;
@@ -44,11 +41,12 @@
 			
 
     /*font-family: 'Roboto Condensed', sans-serif;*/
-
-  
-
-			
-    				
+		}
+		
+		html, button, input, select, textarea {
+		    /* Set your content font stack here: */
+		    font-family: 'Carrois Gothic', sans-serif;
+			/*font-family: 'Anaheim', sans-serif;*/
 		}
 		
 		/***** VARIABLES *****/
@@ -57,25 +55,7 @@
 		
 		/***** LAYOUT *****/
 		
-		body {
-		  color:#cadfe7;
-		}
 		
-		html { 
-		  background: url(/img/from_blue_watercolor_wide_1920x1080.png) #041216 no-repeat center center fixed; 
-		  -webkit-background-size: cover;
-		  -moz-background-size: cover;
-		  -o-background-size: cover;
-		  background-size: cover;		  
-		}
-	    #wrapper {
-			position:relative;
-			margin:0 auto;
-			max-width:72em;  
-			padding: 0 0 5em 0; /* child elements with margins bleed out of the parent elements. ahahahaha. */
-			min-height: 100%;
-			
-		}
 
 		header {
 			width:100%;
@@ -131,9 +111,31 @@
 			color:rgb(42, 193, 225);    		
 		}  	
 		
+		.nav-row {
+			margin-bottom:1em;
+		}
 		
 		nav { 		
 		}
+		
+		/*TODO fix the mobile layout! :[ 
+		 -- show just selected (3? 4?) links, hide everything else under those.
+		 * */
+		
+		.main-nav {
+			text-align:center;
+			margin-bottom:1em;
+		}
+		
+		@media only screen and (min-width : 992px) {
+			.main-nav {
+				text-align:left;
+				margin-bottom:0;
+				padding-left:0;
+				margin-left:0;
+			}
+	
+	    }
 		
 		nav ul {
 			list-style:none;
@@ -150,14 +152,7 @@
 			color:#0378A0;
 		}
 		
-		.main-nav {
-			margin: 0 1em;
-			float:left;
-			margin-bottom:1em;
-			
-		}
-		
-		#search-form input[type="text"] {
+		input[type="text"] {
 			background-color: transparent;
 			line-height: 1.5em;
 			border: medium none;
@@ -165,19 +160,24 @@
 			border-radius: 0.3em;
 			color: #0378A0;
 			border: 1px solid #073e4d;
-			margin-bottom:1em;
-			
+			margin-bottom:1em;	
+			text-align:left;		
 		}
 		
-		#search-form input[type="text"]:hover, #search-form input[type="text"]:focus, #search-form input[type="text"]:active {
+		input[type="text"]:hover, input[type="text"]:focus, input[type="text"]:active {
 			border-color:#0378A0;
 		}
 		
 		#search-form {
-			float:right;  
 			line-height:1.5em;	
-			margin-right:1em;		  		
+			text-align:center;					  		
 		}
+		
+		@media only screen and (min-width : 992px) {
+			#search-form {
+				text-align:right;
+			}
+	    }
 		
 		
 		footer {
@@ -191,18 +191,20 @@
 			color:#0378A0;
 		}
 	    
-	    .button {
+	    .button, input[type="button"] {
 	    	display:inline-block;
 	    	border-radius:0.2em;
 			line-height:1.7em;
 			padding: 0.2em 1em;
-			border: 1px solid transparent;			
+			border: 1px solid transparent;	
+			background-color:transparent;		
 	    }
 	    
-	    .button:hover, .button:active, .button:focus{
+	    .button:hover, .button:active, .button:focus, input[type="button"]{
 			/*background-color: rgba(192, 42, 69, 0.27);*/
 			color:#E72E4F;
 			border: 1px solid #E72E4F !important;
+			text-decoration: none;
 		}
 		
 		.button:visited {
@@ -218,9 +220,6 @@
      * */
     	
     	.content {
-    		clear:both;
-    		margin:1em;
-    		padding:1em 2em;
     		line-height:1.4em;
     		
     	}
@@ -241,6 +240,10 @@
     		margin-top:3em;
     		font-weight:bold;
     	}
+    	
+    	.card {
+    		border:1px solid white;
+    	}
     </style>
     <body>
         <div id="wrapper">
@@ -255,34 +258,35 @@
         		<p class="tagline">A project to design, manufacture, and fly a CubeSat from the University of Southampton</p>
         	 -->        		
         	</header>
-        	
-        	<nav class="main-nav">
-        		<ul>
-        			<li>
-        				<a class="button" href="/">Home</a>
-        			</li>
-        			<li>
-        				<a class="button selected" href="/about">About Us</a>
-        			</li>
-        			<li>
-        				<a class="button" href="/satellite">Satellite</a>
-        			</li>
-        			<li>
-        				<a class="button" href="/data">Data</a>
-        			</li>
-        			<li>
-        				<a class="button" href="/contribute">Contribute</a>
-        			</li>
-        			<li>
-        				<a class="button" href="/a-story">*~A Story~*</a>
-        			</li>        			        			
-        		</ul>
-        	</nav>
-        	
-        	<form id="search-form">
-        		<input type="text" name="search" placeholder="..." />
-        		<a href="#" class="search-btn button">Search</a>
-        	</form>
+        	<div class="row nav-row">
+	        	<nav class="main-nav col-md-8">
+	        		<ul>
+	        			<li>
+	        				<a class="button" href="/">Home</a>
+	        			</li>
+	        			<li>
+	        				<a class="button selected" href="/about">About Us</a>
+	        			</li>
+	        			<li>
+	        				<a class="button" href="/satellite">Satellite</a>
+	        			</li>
+	        			<li>
+	        				<a class="button" href="/data">Data</a>
+	        			</li>
+	        			<li>
+	        				<a class="button" href="/contribute">Contribute</a>
+	        			</li>
+	        			<li>
+	        				<a class="button" href="/a-story">*~A Story~*</a>
+	        			</li>        			        			
+	        		</ul>
+	        	</nav>
+	        	
+	        	<form id="search-form" class="col-md-4 col-md-offset-0">
+	        		<input type="text" name="search" placeholder="..." />
+	        		<a href="#" class="search-btn button">Search</a>
+	        	</form>
+        	</div>
         	@yield('content')
         	<footer>
         	<p>© 2016 UoS³. All Rights Reserved.</p>
