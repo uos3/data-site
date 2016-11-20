@@ -14,7 +14,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth'); //middleware restricts. 'guest' means it's just for guests, 'auth' means it's just for authenticated users.
     }
 
     /**

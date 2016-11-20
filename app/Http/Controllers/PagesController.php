@@ -6,7 +6,8 @@
 class PagesController extends Controller {
 	
 	public function __construct() {
-		$this->middleware('guest');
+		//$this->middleware('guest'); //this 'restricts' the page (or, well, all of the refined ones below) only to logged-out users
+		//CAUTION:if this is used on a page where the login form redirects after a successful login, it creates a redirect loop!
 	}
 	
 	

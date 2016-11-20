@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>University of Southampton Small Satelite{{ isset($title) ? " -- ".$title : '' }}</title>
+        <title>UoS³{{ isset($title) ? " -- ".$title : '' }}</title>
         <link rel="stylesheet" href="css/bootstrap.css">
         <link rel="stylesheet" href="{{ elixir("css/app.css") }}">
 		<link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Raleway|Roboto+Condensed" rel="stylesheet"> <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Raleway|Roboto+Condensed" rel="stylesheet">
@@ -12,7 +12,7 @@
     
     <body>
     	<div class="user-area">
-        			<nav class="user-menu"><a href="#" class="login-link">Login</a> | <a href="#" class="register-link">Register</a></nav>
+        			<nav class="user-menu"><a href="/login" class="login-link">Login</a> | <a href="/register" class="register-link">Register</a></nav>
         </div>
     	<div id="wrapper">
         	<header class="row">
