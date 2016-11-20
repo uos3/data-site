@@ -39,6 +39,11 @@ class AuthController extends Controller
     {
         $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
     }
+	
+	private function makeSubmitKey() {
+		$key = str_random(40);
+		return $key;
+	}
 
     /**
      * Get a validator for an incoming registration request.
@@ -65,10 +70,17 @@ class AuthController extends Controller
     {
     	$this->redirectTo = '/profile';
 		
-        return User::create([
+		$submit_key = '';
+		
+		do {
+			$submit_key = $this->makeSubmitKey();
+		} while (User::where("submit_key", "=", $submit_key)->first() instanceof User);
+		
+		return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'submit_key' => $submit_key,
         ]);
     }
 }

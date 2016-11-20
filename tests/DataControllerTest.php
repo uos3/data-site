@@ -5,6 +5,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 use App\User;
+use App\BlacklistedIP;
 
 class DataControllerTest extends TestCase
 {
@@ -38,29 +39,40 @@ class DataControllerTest extends TestCase
 	 * 	@todo needs blocking/unblocking a user
      *	@return void
      */
-	public function testSubmitBlockedUser() {
-		
+	public function testSubmitBlockedIP() {
+		$this->markTestIncomplete('unfinished');
 		//temporarily block localhost
-		$user = User::where('ip_address','127.0.0.1')->first();
-		$user->update(['blocked' => 1]);
+		$ip = BlacklistedIP::firstOrCreate(['ip_address'=>'127.0.0.1']);
 		
-		$response = $this->call('POST','data/submit',['app_key'=>'OTe7K69Plj0nAFgX91sAszl2txy9TobF','cubesat_time'=>Carbon\Carbon::now(),'uploaded_at'=>Carbon\Carbon::now()]);
-		//curl -v -s -i -d "app_key=OTe7K69Plj0nAFgX91sAszl2txy9TobF" "http://cubehome_local/data/submit" 1> /dev/null
+		$response = $this->call('POST','data/submit',['app_key'=>env('APP_KEY'),'cubesat_time'=>Carbon\Carbon::now(),'uploaded_at'=>Carbon\Carbon::now()]);
+		//curl -v -s -i -d "app_key=" "http://cubehome_local/data/submit" 1> /dev/null
 		
 		$this->assertResponseStatus('403');
 		$this->see('Access denied.');
 		
-		$user->update(['blocked' => 0]);
-		//unblock user again!
+		$ip->delete();
+	}
+	
+	public function testSubmitBlockedUser() {
+		
+		//pick user with id=1 (now our test user)
+		//set them to blocked
+		
+		//try uploading with their credentials
+		
+		//should throw 403 and access denied 
+		
+		//unblock user!
 	}
 	
 	/**
      *	If everything is OK, return 200.
      *	@return void
      */
-	public function testSubmitOK() {
-		$response = $this->call('POST','data/submit',['app_key'=>'OTe7K69Plj0nAFgX91sAszl2txy9TobF','user_id'=>1,'cubesat_time'=>Carbon\Carbon::now(),'uploaded_at'=>Carbon\Carbon::now()]);
-		//curl -v -s -i -d "app_key=OTe7K69Plj0nAFgX91sAszl2txy9TobF" "http://cubehome_local/data/submit" 1> /dev/null
+	public function testAnonymousSubmit() {
+		
+		$response = $this->call('POST','data/submit',['app_key'=>env('APP_KEY'),'cubesat_time'=>Carbon\Carbon::now(),'uploaded_at'=>Carbon\Carbon::now()]);
+		//curl -v -s -i -d "app_key=" "http://cubehome_local/data/submit" 1> /dev/null
 		
 		$this->assertResponseOk();
 		$this->see("Success.");
@@ -72,6 +84,17 @@ class DataControllerTest extends TestCase
 			
 		//$this->markTestIncomplete('unfinished');
 		//$this->markedTestSkipped('not now');
+	}
+	
+	public function testRegisteredUserSubmit() {
+		
+		$user = User::whereNotNull('submit_key')->first();
+		
+		//try to submit with their key
+		
+		//should return ok and see success
+		
+		$this->markTestIncomplete('unfinished');
 	}
 	
 	

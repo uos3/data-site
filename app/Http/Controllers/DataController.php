@@ -35,9 +35,14 @@ class DataController extends Controller
 		//get submitter's ip
 		$ip = $request->ip();
 		
+		//check if IP isn't blacklisted		
+		if ($user->blocked) {
+			abort(403, 'Access denied.'); //lolnope.
+		}
 		
-		//$user = User::where('ip_address',$ip)->first();
-		$user = User::firstOrCreate(['ip_address'=>$ip]); //I think this might stop working once I have more than just ip. Lets figure that out later.
+		//is submit_key set? if yes: get user 
+		
+		//if submit_key wrong, throw error (shouldn't accidentally upload anonymous data if the key is wrong...)
 		
 		//check if user isn't blocked		
 		if ($user->blocked) {
@@ -49,7 +54,11 @@ class DataController extends Controller
 		
 		//add computed values
 		$data['uploaded_at'] = Carbon::now()->toDateTimeString();
-		$data['user_id'] = $user->id;
+		
+		$data['ip_address'] = $ip;
+		
+		//if user is authenticated:
+		$data['user_id'] = $user->id; //otherwise keep NULL
 		
 		//validate
 		$validator = Validator::make($data,Submission::$validation_rules);

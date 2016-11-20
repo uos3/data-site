@@ -15,6 +15,7 @@ class Submission extends Model
 	protected $fillable = [
 		'uploaded_at',
 		'user_id',
+		'ip_address',
 		'cubesat_time',
 		'temperature',
 		'gyro_x',
