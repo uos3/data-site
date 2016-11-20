@@ -1,0 +1,21 @@
+body {
+  font-family: 'Carrois Gothic', sans-serif;
+  color:$color-typo;
+  /*font-family: 'Anaheim', sans-serif;*/
+  /*font-family: 'Roboto Condensed', sans-serif;*/
+}
+
+a {
+  color:#E72E4F;
+  text-decoration:none;
+}
+a:visited {
+  color:rgb(143, 35, 77);
+  color:rgb(236, 100, 124);
+  color:#AD6370;
+}
+
+a:hover, a:active, a:focus {
+  color:rgb(37, 176, 218)
+          
+} 

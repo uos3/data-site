@@ -1,0 +1,80 @@
+body { 
+  background: url(/img/from_blue_watercolor_wide_1920x1080.png) $color-dark no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;    
+}
+
+//TODO bg for medium and small screens - smaller bg image
+
+
+#wrapper {
+  position:relative;
+  padding-top:5em;
+  //max-width:72em;
+  margin:0 0.001em; 
+  padding: 5em 1em 1em 1em; /* child elements with margins bleed out of the parent elements. ahahahaha. */
+  min-height: 100%;
+  margin-bottom:5em;  
+}
+
+.user-area {
+  width:100%;
+  height: 3em;
+  line-height:3em;
+  padding:0.5em 1em;
+  background-color:fade-out($color-dark,0.5);
+  font-size:1em;
+  color:lighten($color-dark,0.7);
+  position:absolute;
+}
+
+.user-menu {
+  float:right;
+  height:2em;
+  line-height:2em;
+  text-align:right;
+  
+}
+
+.user-menu a, .user-menu a:visited {
+  color:#0378A0;
+}
+
+.user-menu a:hover, .user-menu a:focus {
+  color:rgb(42, 193, 225);
+}
+
+.content {
+  line-height:1.4em;
+  padding:1em;
+}
+
+.card.flat {
+  background-color:#0E222A;
+  border-radius:0.4em;
+  padding:1em;
+}
+
+.content p {
+  margin-bottom:1em;
+}
+
+.content p.shout {
+  text-align:center;
+  font-size:3em;
+  color:#E72E4F;
+  margin-top:3em;
+  font-weight:bold;
+}
+
+
+footer {
+  height:5em;
+  font-size:0.8em;
+  padding:1em;
+  display:block;
+  width:100%;
+  color:#0378A0;
+}

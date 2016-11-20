@@ -1,52 +1,25 @@
-@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import '_resets.scss'; //resets
 
+@import '_utils.scss'; //mixins, variables, etc.
 
-/****** RESETS *******/
-html {
-  box-sizing:border-box;
-  height: 100%;   
-}
+@import '_typography.scss'; //fonts, type colors, basic line-height...
 
-*, *:before, *:after {
-  box-sizing:inherit;
-}
+@import '_layout.scss'; //layout
 
-img, video{
-  max-width:100%;
-}
+@import '_header.scss';
 
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  display: table;
-  font-weight: 100;
-}
-
-/***** VARIABLES *****/
+@import '_modules.scss'; //modules
 
 
 
-/***** LAYOUT *****/
+/*
+     * TODO FIX THE DAMN HEADER.
+     * - make it smaller. It's not as important as the rest of the page!
+     * - SMALLER LOGO. Esp since this isn't a shop. Nothing to sell = no need for brand recognition = logo is pointless. NO LOGO?????
+     * - start designing navigation from mobile. Just 3 elements? WHICH ONES???
+     * - do we need search???? (and if yes, where should it go?)
+     */
 
-
-body { 
-  background: url(/img/from_blue_watercolor_wide_1920x1080.png) #041216 no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  color:#cadfe7;     
-}
-
-  #wrapper {
-  position:relative;
-  margin:0 5em;
-  //max-width:72em;  
-  padding: 0 0 5em 0; /* child elements with margins bleed out of the parent elements. ahahahaha. */
-  min-height: 100%;
-  
-}
 
 //
 //1920*1080 bg + a couple of smaller sizes picked by a media query

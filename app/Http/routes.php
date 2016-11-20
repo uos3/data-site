@@ -12,8 +12,8 @@
 */
 
 Route::get('/','PagesController@welcome');
-
 Route::get('about','PagesController@about');
+Route::get('contribute','PagesController@contribute');
 
 Route::get('submit',['as'=>'submit','uses'=>'PagesController@submit']);
 

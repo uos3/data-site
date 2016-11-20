@@ -5730,36 +5730,4 @@ button.close {
   .hidden-print {
     display: none !important; } }
 
-/****** RESETS *******/
-html {
-  box-sizing: border-box;
-  height: 100%; }
-
-*, *:before, *:after {
-  box-sizing: inherit; }
-
-img, video {
-  max-width: 100%; }
-
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  display: table;
-  font-weight: 100; }
-
-/***** VARIABLES *****/
-/***** LAYOUT *****/
-body {
-  background: url(/img/from_blue_watercolor_wide_1920x1080.png) #041216 no-repeat center center fixed;
-  background-size: cover;
-  color: #cadfe7; }
-
-#wrapper {
-  position: relative;
-  margin: 0 5em;
-  padding: 0 0 5em 0;
-  /* child elements with margins bleed out of the parent elements. ahahahaha. */
-  min-height: 100%; }
-
-/*# sourceMappingURL=app.css.map */
+/*# sourceMappingURL=bootstrap.css.map */

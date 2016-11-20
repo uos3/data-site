@@ -1,0 +1,28 @@
+/* VARIABLES */
+
+$color-dark:#041216;
+$color-typo:#cadfe7; 
+
+/* MIXINS */
+
+
+/* BOOTSTRAP BREAKPOINTS */
+
+$b-xs-up:"only screen and (min-width : 480px)"; //phones
+$b-sm-up:"only screen and (min-width : 768px)"; //tablets
+$b-md-up:"only screen and (min-width : 992px)"; //tablets, small displays
+$b-lg-up:"only screen and (min-width : 1200px)"; //large displays
+
+$b-xs-down:"only screen and (max-width : 768px)"; //phones
+$b-sm-down:"only screen and (max-width : 992px)"; //tablets
+$b-md-down:"only screen and (max-width : 1200px)"; //small displays
+
+/*
+ usage:
+ 
+ @media #{$b-sm-up} {
+   
+ }
+ 
+ * 
+ * */
