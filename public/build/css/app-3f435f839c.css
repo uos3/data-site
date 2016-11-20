@@ -71,7 +71,8 @@ body {
   background-color: rgba(4, 18, 22, 0.5);
   font-size: 1em;
   color: #051419;
-  position: absolute; }
+  position: absolute;
+  z-index: 9000; }
 
 .user-menu {
   float: right;

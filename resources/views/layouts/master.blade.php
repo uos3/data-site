@@ -10,9 +10,16 @@
         
     </head>
     
-    <body>
+    <body class="page-welcome">
     	<div class="user-area">
-        			<nav class="user-menu"><a href="/login" class="login-link">Login</a> | <a href="/register" class="register-link">Register</a></nav>
+    			<nav class="user-menu">
+	    			@if (Auth::check())
+	    				<a href="/profile" class="profile-link">{{ Auth::user()->name }}</a> | <a href="/logout" class="logout-link">Log out</a>
+	    			@else
+	    				<a href="/login" class="login-link">Login</a> | <a href="/register" class="register-link">Register</a>
+	    			@endif
+	    		</nav>
+        			
         </div>
     	<div id="wrapper">
         	<header class="row">

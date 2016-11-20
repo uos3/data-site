@@ -17,7 +17,7 @@ class AddLoginCredsToUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->rememberToken();
-			$table->string('app_key')->unique()->nullable()->default(NULL);
+			$table->string('submit_key')->unique()->nullable()->default(NULL);
             //
         });
     }
@@ -30,7 +30,7 @@ class AddLoginCredsToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-        	$table->dropColumn(['name', 'email', 'password','remember_token','app_key']);
+        	$table->dropColumn(['name', 'email', 'password','remember_token','submit_key']);
             //
         });
     }

@@ -47,7 +47,7 @@ class DataControllerTest extends TestCase
 		$response = $this->call('POST','data/submit',['app_key'=>'OTe7K69Plj0nAFgX91sAszl2txy9TobF','cubesat_time'=>Carbon\Carbon::now(),'uploaded_at'=>Carbon\Carbon::now()]);
 		//curl -v -s -i -d "app_key=OTe7K69Plj0nAFgX91sAszl2txy9TobF" "http://cubehome_local/data/submit" 1> /dev/null
 		
-		$this->assertEquals('403',$response->status());
+		$this->assertResponseStatus('403');
 		$this->see('Access denied.');
 		
 		$user->update(['blocked' => 0]);
@@ -62,7 +62,7 @@ class DataControllerTest extends TestCase
 		$response = $this->call('POST','data/submit',['app_key'=>'OTe7K69Plj0nAFgX91sAszl2txy9TobF','user_id'=>1,'cubesat_time'=>Carbon\Carbon::now(),'uploaded_at'=>Carbon\Carbon::now()]);
 		//curl -v -s -i -d "app_key=OTe7K69Plj0nAFgX91sAszl2txy9TobF" "http://cubehome_local/data/submit" 1> /dev/null
 		
-		$this->assertEquals('200',$response->status());
+		$this->assertResponseOk();
 		$this->see("Success.");
 	}
 	

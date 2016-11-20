@@ -15,7 +15,7 @@ class PageControllerTest extends TestCase
     {
         $this->get('/');
 		$this->assertResponseOk();
-		$this->see('welcome page');
+		$this->see('class="page-welcome"');
 						 
     }
 	

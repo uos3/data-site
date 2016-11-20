@@ -1,5 +1,8 @@
 <?php namespace App\Http\Controllers;
 
+
+use Illuminate\Support\Facades\Auth;
+
 /**
  * 
  */
@@ -11,8 +14,8 @@ class PagesController extends Controller {
 	}
 	
 	
-	public function welcome() {
-		return view('welcome');
+	public function home() {
+		return view('home');
 	}
 	
 	public function about() {

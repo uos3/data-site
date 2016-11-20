@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/','PagesController@welcome');
+Route::get('/','PagesController@home');
 Route::get('about','PagesController@about');
 Route::get('contribute','PagesController@contribute');
 
@@ -26,6 +26,7 @@ Route::get('data/submit','DataController@redirect');
 
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
-
-    Route::get('/home', 'HomeController@index');
+	
+	Route::get('/profile','UserAreaController@profile');
+    //Route::get('/home', 'HomeController@index');
 });
