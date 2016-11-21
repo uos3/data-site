@@ -8,6 +8,9 @@ class BlacklistedIP extends Model
 {
 	protected $table = 'ip_blacklist';
 	
+	public $timestamps = false; //not using default timestamp columns = Eloquent is a sad sad panda
+	
+	
     /**
      * The attributes that are mass assignable.
      *

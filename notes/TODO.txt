@@ -2,8 +2,6 @@ TODO
 ====
 
 * submit_key functionality:
-	- fix upload
-	- fix unit tests
 	- fix login/register layouts (use master.blade.php)
 	- 
 

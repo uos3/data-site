@@ -6,9 +6,26 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 use App\User;
 use App\BlacklistedIP;
+use App\Helpers\Helper;
 
 class DataControllerTest extends TestCase
 {
+	
+	use DatabaseTransactions;
+	
+	protected function makeUser() {
+		
+		$user = User::firstOrCreate([
+			"name"=>'John',
+			"email"=>'example@test.com',			
+		]);
+		
+		$user->submit_key = Helper::makeUniqueSubmitKey();
+		$user->save();
+		
+		return $user;
+	}
+	
     /**
      *	If the request has no app key, abort with 401.
      *	@return void
@@ -36,15 +53,17 @@ class DataControllerTest extends TestCase
 	
 	/**
      *	If the request is comming from blocked IP, abort with 403.
-	 * 	@todo needs blocking/unblocking a user
-     *	@return void
+	 * 	@return void
      */
 	public function testSubmitBlockedIP() {
-		$this->markTestIncomplete('unfinished');
 		//temporarily block localhost
 		$ip = BlacklistedIP::firstOrCreate(['ip_address'=>'127.0.0.1']);
 		
-		$response = $this->call('POST','data/submit',['app_key'=>env('APP_KEY'),'cubesat_time'=>Carbon\Carbon::now(),'uploaded_at'=>Carbon\Carbon::now()]);
+		$response = $this->call('POST','data/submit',[
+				'app_key'=>env('APP_KEY'),
+				'cubesat_time'=>Carbon\Carbon::now(),
+				'uploaded_at'=>Carbon\Carbon::now()
+			]);
 		//curl -v -s -i -d "app_key=" "http://cubehome_local/data/submit" 1> /dev/null
 		
 		$this->assertResponseStatus('403');
@@ -53,16 +72,55 @@ class DataControllerTest extends TestCase
 		$ip->delete();
 	}
 	
-	public function testSubmitBlockedUser() {
+	
+	/**
+     *	If the request is made with a wrong submit key, abort with 401.
+	 * 	@return void
+     */
+	public function testSubmitBadSubmitKey() {
 		
-		//pick user with id=1 (now our test user)
-		//set them to blocked
+		//generate a key (it will be unique to the db - but it won't be in the db. Nifty!)	
+		$bad_submit_key = Helper::makeUniqueSubmitKey();
+		
+		//try uploading with it
+		$response = $this->call('POST','data/submit',[
+				'app_key'=>env('APP_KEY'),
+				'submit_key'=>$bad_submit_key,
+				'cubesat_time'=>Carbon\Carbon::now(),
+				'uploaded_at'=>Carbon\Carbon::now()
+			]);
+		
+		//should be soft-blocked
+		$this->assertResponseStatus('401');
+		$this->see("No user with this submit key found.");				
+	}
+	
+	
+	/**
+     *	If the request is made by a blocked user, abort with 403.
+	 * 	@return void
+     */
+	public function testSubmitBlockedUser() {
+		//create a test user
+		$user = $this->makeUser();
+		//block the test user
+		$user->blocked=true;
+		$user->save();
 		
 		//try uploading with their credentials
+		$response = $this->call('POST','data/submit',[
+				'app_key'=>env('APP_KEY'),
+				'submit_key'=>$user->submit_key,
+				'cubesat_time'=>Carbon\Carbon::now(),
+				'uploaded_at'=>Carbon\Carbon::now()
+			]);
 		
-		//should throw 403 and access denied 
+		//should be blocked
+		$this->assertResponseStatus('403');
+		$this->see('Access denied.'); 
 		
-		//unblock user!
+		//delete the user
+		$user->delete();		
 	}
 	
 	/**
@@ -71,11 +129,19 @@ class DataControllerTest extends TestCase
      */
 	public function testAnonymousSubmit() {
 		
-		$response = $this->call('POST','data/submit',['app_key'=>env('APP_KEY'),'cubesat_time'=>Carbon\Carbon::now(),'uploaded_at'=>Carbon\Carbon::now()]);
+		$timestamp = Carbon\Carbon::now();
+		$response = $this->call('POST','data/submit',[
+				'app_key'=>env('APP_KEY'),
+				'cubesat_time'=>$timestamp,
+				'uploaded_at'=>Carbon\Carbon::now()
+		]);
 		//curl -v -s -i -d "app_key=" "http://cubehome_local/data/submit" 1> /dev/null
 		
 		$this->assertResponseOk();
 		$this->see("Success.");
+		$this->seeInDatabase('submissions',[
+				'cubesat_time'=>$timestamp,
+			]);
 	}
 	
 	public function testRedirect() {
@@ -88,13 +154,36 @@ class DataControllerTest extends TestCase
 	
 	public function testRegisteredUserSubmit() {
 		
-		$user = User::whereNotNull('submit_key')->first();
+		$user = $this->makeUser();
+		$timestamp = Carbon\Carbon::now();
 		
 		//try to submit with their key
+		$response = $this->call('POST','data/submit',[
+				'app_key'=>env('APP_KEY'),
+				'submit_key'=>$user->submit_key,
+				'cubesat_time'=>$timestamp,
+				'uploaded_at'=>Carbon\Carbon::now()
+			]);
 		
 		//should return ok and see success
+		$this->assertResponseOk();
+		$this->see("Success.");
+		$this->seeInDatabase('submissions',[
+				'cubesat_time'=>$timestamp,
+			]);
+		$user->delete();
+	}
+	
+	//dumb hack - clear testing user from the database in case the tests throw error and the user isn't deleted
+	//TODO figure out a cleaner way to do it (testing db?)
+	protected static function setUpAfterClass() {
+		$user = User::where([
+			"name"=>'John',
+			"email"=>'example@test.com',
+			"password"=>''			
+		])->first();
 		
-		$this->markTestIncomplete('unfinished');
+		$user->delete();
 	}
 	
 	
