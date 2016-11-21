@@ -56,10 +56,9 @@ body {
 
 #wrapper {
   position: relative;
-  padding-top: 5em;
   margin: 0 0.001em;
-  padding: 5em 1em 1em 1em;
-  /* child elements with margins bleed out of the parent elements. ahahahaha. */
+  padding: 4em 1em 1em 1em;
+  /* without margins things 'bleed out' of the page. Probably Bootstrap? */
   min-height: 100%;
   margin-bottom: 5em; }
 
@@ -88,7 +87,8 @@ body {
 
 .content {
   line-height: 1.4em;
-  padding: 1em; }
+  padding: 1em;
+  padding-top: 2em; }
 
 .card.flat {
   background-color: #0E222A;
@@ -195,7 +195,7 @@ nav ul li .selected {
     line-height: 3em;
     padding-top: 0.3em; } }
 
-input[type="text"] {
+input[type="text"], input[type="email"], input[type="password"] {
   background-color: transparent;
   line-height: 1.5em;
   border: medium none;
@@ -206,7 +206,9 @@ input[type="text"] {
   margin-bottom: 1em;
   text-align: left; }
 
-input[type="text"]:hover, input[type="text"]:focus, input[type="text"]:active {
+input[type="text"]:hover, input[type="text"]:focus, input[type="text"]:active,
+input[type="email"]:hover, input[type="email"]:focus, input[type="email"]:active,
+input[type="password"]:hover, input[type="password"]:focus, input[type="password"]:active {
   border-color: #0378A0; }
 
 .button, input[type="button"] {
@@ -225,6 +227,23 @@ input[type="text"]:hover, input[type="text"]:focus, input[type="text"]:active {
 
 .button:visited {
   color: #E72E4F; }
+
+.panel {
+  background-color: transparent;
+  border: 0; }
+
+.panel-body {
+  background-color: rgba(4, 18, 22, 0.5);
+  color: #cadfe7;
+  border: none;
+  border-radius: 3px;
+  padding-top: 2em; }
+
+.panel .panel-heading {
+  background-color: transparent;
+  border-bottom: none;
+  color: #E72E4F;
+  font-size: 1.7em; }
 
 /*
      * TODO FIX THE DAMN HEADER.

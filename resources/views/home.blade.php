@@ -4,7 +4,7 @@
 
 @section('content')
 	
-<div class="content">
+<div class="content container-fluid">
 	<div class="row">  
 		<div id="project-status" class="card col-md-8 col-sm-12">
 			<p class="status-info">The launch date for the satellite has been secured! It will launch on XXth of Somethember 201x.</p>
