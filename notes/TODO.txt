@@ -10,18 +10,26 @@ TODO
 * make Profile page
 	- fields
 	- upload number stats (since XY)
-	
+
 * make About page
 * get some rough content from Alec/Phil	
+
+* design Contribute page
 	
+* user management functionality:
+	- email address validation
+	- delete user account (keep submissions, remove user id) 
+
 	
 * list 'art' ideas (or find them - I have a couple noted down... somewhere...)
 
- 
 
 
 DONE
 ====
+
+- fix upload
+- fix unit tests
 
 - look at moodboard: do you still like this?
 - brainstorm ideas: colors + style
