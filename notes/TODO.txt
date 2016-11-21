@@ -1,12 +1,9 @@
 TODO
 ====
 
-* submit_key functionality:
-	- fix login/register layouts (use master.blade.php)
-	- 
-
 * design homepage
-	- redesign: 'satellite news' narrow banner + 'about' wide large carousel
+	- redesign: 'satellite news' = narrow band, 'project intro' = ...? NOT a carousel, internet says they're bad at accessibility
+
 * make Profile page
 	- fields
 	- upload number stats (since XY)
@@ -15,6 +12,8 @@ TODO
 * get some rough content from Alec/Phil	
 
 * design Contribute page
+
+* CHECK AND FIX ACCESSIBILITY
 	
 * user management functionality:
 	- email address validation
@@ -28,6 +27,8 @@ TODO
 DONE
 ====
 
+- fix login/register layouts (use master.blade.php)
+	
 - fix upload
 - fix unit tests
 
