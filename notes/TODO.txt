@@ -1,0 +1,51 @@
+TODO
+====
+
+* design homepage
+	- redesign: 'satellite news' = narrow band, 'project intro' = ...? NOT a carousel, internet says they're bad at accessibility
+
+* make Profile page
+	- fields
+	- upload number stats (since XY)
+
+* make About page
+* get some rough content from Alec/Phil	
+
+* design Contribute page
+
+* CHECK AND FIX ACCESSIBILITY
+	
+* user management functionality:
+	- email address validation
+	- delete user account (keep submissions, remove user id) 
+
+	
+* list 'art' ideas (or find them - I have a couple noted down... somewhere...)
+
+
+
+DONE
+====
+
+- fix login/register layouts (use master.blade.php)
+	
+- fix upload
+- fix unit tests
+
+- look at moodboard: do you still like this?
+- brainstorm ideas: colors + style
+- try out things in Gimp/Inkscape
+- ask: will this work with my own art ideas?
+- brainstorm ideas: layout
+	
+* finish data submission into db (DataController)
+	- finish unit test case for blocked user
+	- use temp db (Sqlite?) for testing
+	- submit data to db
+	
+
+- download Pure.js and set up a wireframe for the homepage (user the included Twitter Bootstrap instead)
+- pick a font (might change)
+- think about possible contents and their visual solutions: page with a longish block of text; graphs; modular (news + illustrations + ??) (modules planned out)
+* design other static pages
+	- take homepage design and pare it down for text

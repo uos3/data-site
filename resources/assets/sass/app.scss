@@ -1,2 +1,29 @@
-// @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import '_resets.scss'; //resets
 
+@import '_utils.scss'; //mixins, variables, etc.
+
+@import '_typography.scss'; //fonts, type colors, basic line-height...
+
+@import '_layout.scss'; //layout
+
+@import '_header.scss';
+
+@import '_modules.scss'; //modules
+
+
+
+/*
+     * TODO FIX THE DAMN HEADER.
+     * - make it smaller. It's not as important as the rest of the page!
+     * - SMALLER LOGO. Esp since this isn't a shop. Nothing to sell = no need for brand recognition = logo is pointless. NO LOGO?????
+     * - start designing navigation from mobile. Just 3 elements? WHICH ONES???
+     * - do we need search???? (and if yes, where should it go?)
+     */
+
+
+//
+//1920*1080 bg + a couple of smaller sizes picked by a media query
+
+//small
+//medium
+//large 

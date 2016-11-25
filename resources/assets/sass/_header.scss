@@ -1,0 +1,106 @@
+header.row {
+  margin:0 0 2em 0;  
+}
+
+.logo {
+  margin:0 auto;
+  text-align:center;
+}
+.logo > img {
+  width:1.5em;
+}
+
+.logo {
+  display:block;
+  width:100%;
+  padding-bottom:1em;
+}
+
+.logo h1 {
+  padding:0;
+}
+
+@media #{$b-sm-up} {
+  .logo {
+    display:inline;
+    width:auto;
+    padding-bottom:0;
+  }
+}
+
+.main-nav {
+  text-align:center;
+  margin-bottom:1em;
+  line-height:3em;
+  font-size:1.3em;
+  padding-left:0;
+  margin-left:0;
+}
+
+@media only screen and (min-width : 768px) {
+  .main-nav {
+    text-align:left;
+    margin-bottom:0;
+    padding-left:0;
+    margin-left:0;
+  }
+
+  }
+  
+  @media only screen and (max-width:768px) {
+    .primary-ul {
+      font-size:1.6em;
+      margin-bottom:0.1em;
+      width:100%;
+    }
+    
+    .main-nav {
+      line-height:2em;
+    }
+  }
+  
+  nav ul {
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:inline-block;
+}
+nav ul li {
+  margin:0;
+  padding:0;
+  display:inline-block;
+}
+
+nav ul li .selected {
+  color:$color-highlight-blue
+}
+
+
+.main-nav a {
+  padding:0 0.3em;
+  line-height:1.5em;
+}
+
+.main-nav a:hover,.main-nav a:focus, .main-nav a:active {
+  text-decoration:none;
+}
+
+  @media only screen and (min-width : 768px) {
+  #menu-search {
+    display:none;
+  } 
+  }
+
+#search-form {
+  line-height:1.5em;
+  display:none;               
+}
+
+@media only screen and (min-width : 768px) {
+  #search-form {
+    text-align:right;
+    //display:inline-block; //TODO: fix when supplying search functionality (if ever)
+    line-height:3em;
+    padding-top: 0.3em;
+  }
+  }

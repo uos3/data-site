@@ -1,0 +1,27 @@
+/****** RESETS *******/
+html {
+  box-sizing: border-box;
+  height: 100%; }
+
+*, *:before, *:after {
+  box-sizing: inherit; }
+
+img, video {
+  max-width: 100%; }
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-weight: 100; }
+
+/***** VARIABLES *****/
+/***** LAYOUT *****/
+body {
+  color: #eee; }
+
+html {
+  background: url(/img/from_blue_watercolor_wide_1920x1080.png) no-repeat center center fixed;
+  background-size: cover; }
+
+/*# sourceMappingURL=app.css.map */

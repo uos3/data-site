@@ -1,0 +1,41 @@
+Website Content
+===============
+(circa by pages/urls)
+
+v1 - the barest minimum
+
+* homepage
+	- basic intro
+	- link to blog
+	- news [widget? RSS?]
+	- link to soc media
+	- link to UoS
+	- link to about page
+	- link to specific info pages
+	
+* about page
+
+* specific info pages
+
+* basic database status info
+
+--------------------------------------
+v2 - Anna's bare minimum
+
++ visualisations (...and stuff)
+
+---------------------------------------
+v3 - we want this (a lot)
+
++ user profile
++ user profile management
++ admin user management (block from uploading, blacklist, ...?)
++ submissions "high scores" page
+
+----------------------------------------
+v4 - best outcome
+
++ API
++ API docs
++ user forum
++ messaging system

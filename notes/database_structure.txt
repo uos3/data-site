@@ -1,0 +1,37 @@
+Database Structure
+==================
+
+submissions
+-------
+* id
+* uploaded_at
+* user_id (users automatically generated per-IP in v1; in v2+ identified by a key entered by the user in the Java app) 
+* cubesat_time
+* temperature
+* gyro_x
+* gyro_y
+* gyro_z
+* accelerometer_x
+* accelerometer_y
+* accelerometer_z
+* (gnss values as columns: 7)
+* magnetometer values as columns: 3)
+
+users
+--------
+
+v1
+--
+* id
+* ip_address
+* blocked (default: 0)
+
+v2
+--
++ username
++ email
++ submit_key
+(blah blah profile data)
++ status (public|private|deleted)
+
+

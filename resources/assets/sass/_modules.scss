@@ -1,0 +1,63 @@
+input[type="text"],input[type="email"],input[type="password"] {
+  background-color: transparent;
+  line-height: 1.5em;
+  border: medium none;
+  padding: 0.3em;
+  border-radius: 0.3em;
+  color: #0378A0;
+  border: 1px solid #073e4d;
+  margin-bottom:1em;  
+  text-align:left;    
+}
+
+//TODO do this the Sass way
+input[type="text"]:hover, input[type="text"]:focus, input[type="text"]:active,
+input[type="email"]:hover, input[type="email"]:focus, input[type="email"]:active,
+input[type="password"]:hover, input[type="password"]:focus, input[type="password"]:active
+ {
+  border-color:#0378A0;
+}
+
+
+.button, input[type="button"] {
+  display:inline-block;
+  border-radius:0.2em;
+  line-height:1.7em;
+  padding: 0.2em 1em;
+  border: 1px solid transparent;  
+  background-color:transparent;   
+  }
+  
+  .button:hover, .button:active, .button:focus, input[type="button"]{
+  /*background-color: rgba(192, 42, 69, 0.27);*/
+  color:$color-highlight-red;
+  border: 1px solid $color-highlight-red !important;
+  text-decoration: none;
+}
+
+.button:visited {
+  color:$color-highlight-red;
+}
+
+.panel {
+  background-color:transparent;
+  border:0;
+}
+
+.panel-body {
+  background-color:fade-out($color-dark,0.5);;
+  color:$color-typo;
+  //border:1px solid darken($color-highlight-blue,0.5);
+  border:none;
+  border-radius:3px;
+  padding-top:2em;  
+}
+
+.panel .panel-heading {
+  background-color:transparent;
+  border-bottom:none;
+  color:$color-highlight-red;
+  font-size:1.7em;
+}
+
+
