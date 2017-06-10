@@ -4,59 +4,43 @@
         <title>UoS³{{ isset($title) ? " -- ".$title : '' }}</title>
         <link rel="stylesheet" href="css/bootstrap.css">
         <link rel="stylesheet" href="{{ elixir("css/app.css") }}">
-	<link href="https://fonts.googleapis.com/css?family=Anaheim|Carrois+Gothic" rel="stylesheet">     
+	<link href="https://fonts.googleapis.com/css?family=Coda|Raleway:400,400i,700" rel="stylesheet">      
 	<meta name="robots" content="noindex">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
         
     </head>
     
     <body class="page-welcome">
-    	<div class="user-area">
-    			<nav class="user-menu">
-	    			@if (Auth::check())
-	    				<a href="/profile" class="profile-link">{{ Auth::user()->name }}</a> | <a href="/logout" class="logout-link">Log out</a>
-	    			@else
-	    				<a href="/login" class="login-link">Login</a> | <a href="/register" class="register-link">Register</a>
-	    			@endif
-	    		</nav>
-        			
-        </div>
+    	<header id="main-header" class="container-fluid">
+    		<div class="row">
+    			<div class="col-md-2 col-sm-8 logo-col">
+    				<a href="/">
+	    				<h1 class="logo">
+		    				<img src="/img/uos3-logo-only_bright.png">
+		    				<span>Data</span>
+		    			</h1>
+	    			</a>
+    			</div>
+    			<div class="col-md-10 col-sm-4 menu-col">
+    				<nav class="pages-menu">
+		    			<ul>
+		    				<li><a href="/satellite-info">Satellite info</a></li>
+		    				<li><a href="/satellite-info">Stats</a></li>
+		    				<li><a href="/satellite-info">Leaderboard</a></li>
+		    			</ul>
+		    		</nav>
+    				<nav class="user-menu">
+		    			@if (Auth::check())
+		    				<a href="/profile" class="profile-link">{{ Auth::user()->name }}</a> | <a href="/logout" class="logout-link">Log out</a>
+		    			@else
+		    				<a href="/login" class="login-link">Login</a> | <a href="/register" class="register-link">Register</a>
+		    			@endif
+		    		</nav>
+    			</div>
+    		</div>	
+    	</header>
     	<div id="wrapper">
-        	<header class="container-fluid">
-        		<div class="row">
-	        		<nav class="main-nav col-sm-7">
-		        		<ul class="primary-ul">
-		        			<li class="logo">
-		        				<a href="/"><h1 class="logo"><img src="/img/uos3-logo-only_bright.png"></h1></a>
-		        			</li>
-		        			<li>
-		        				<a class="selected" href="/about" id="menu-team">About</a>
-		        			</li>
-		        			<li>
-		        				<a href="/satellite" id="menu-satellite">Satellite</a>
-		        			</li>
-		        			<li>
-		        				<a href="/data" id="menu-data">Data</a>
-		        			</li>		        			
-		        		</ul>
-		        		<ul class="secondary-ul">
-		        			<li>
-		        				<a href="/contribute"  id="menu-contribute">Contribute</a>
-		        			</li>
-		        			<li>
-		        				<a href="/a-story"  id="menu-art">Art</a>
-		        			</li>  
-							<li>
-								<a href="" id="menu-search">Search</a>
-							</li>
-		        		</ul>
-		        	</nav>
-		        	<form id="search-form" class="col-sm-5 col-sm-offset-0">
-		        		<input type="text" name="search-text" id="search-text" placeholder="..." />
-		        		<a href="#" class="search-btn button">Search</a>
-		        	</form>
-	        	</div>
-	        </header>
+        	
         	@yield('content')   
         	<div class="push"></div>     	
         </div>

@@ -1,21 +1,26 @@
 body {
-  font-family: 'Carrois Gothic', sans-serif;
+  font-family: 'Raleway', sans-serif;
   color:$color-typo;
-  /*font-family: 'Anaheim', sans-serif;*/
-  /*font-family: 'Roboto Condensed', sans-serif;*/
 }
 
+h1, h2, h3, h4, h5, #main-header {
+  font-family: 'Coda', sans-serif;
+}
+    
+
+    
+
+
 a {
-  color:$color-highlight-red;
+  color:$color-links;
   text-decoration:none;
 }
 a:visited {
-  color:rgb(143, 35, 77);
-  color:rgb(236, 100, 124);
-  color:#AD6370;
+  color:darken($color-links,0.7);
 }
 
 a:hover, a:active, a:focus {
   color:rgb(37, 176, 218)
           
 } 
+

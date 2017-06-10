@@ -18,12 +18,12 @@ class PagesController extends Controller {
 		return view('home');
 	}
 	
-	public function about() {
-		return view('about')->with("version",'<strong style="color:red">1</strong>');
+	public function satellite_info() {
+		return view('satellite_info');
 	}
 	
-	public function contribute() {
-		return view('contribute');
+	public function about() {
+		return view('about')->with("version",'<strong style="color:red">1</strong>');
 	}
 	
 	public function submit() {
