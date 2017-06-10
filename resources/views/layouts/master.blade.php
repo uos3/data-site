@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>UoS³{{ isset($title) ? " -- ".$title : '' }}</title>
-        <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="/css/bootstrap.css">
         <link rel="stylesheet" href="{{ elixir("css/app.css") }}">
 	<link href="https://fonts.googleapis.com/css?family=Coda|Raleway:400,400i,700" rel="stylesheet">      
 	<meta name="robots" content="noindex">
