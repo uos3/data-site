@@ -8,9 +8,9 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Reset Password</div>
                 <div class="panel-body">
-                    @if (session('status'))
+                    @if (session('form_status'))
                         <div class="alert alert-success">
-                            {{ session('status') }}
+                            {{ session('form_status') }}
                         </div>
                     @endif
 

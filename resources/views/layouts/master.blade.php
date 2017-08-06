@@ -40,8 +40,13 @@
     		</div>	
     	</header>
     	<div id="wrapper">
-        	
-        	@yield('content')   
+			@if (session('status'))
+                <div class="alert alert-success">
+                    {{ session('status') }}
+                </div>
+            @endif
+        
+    		@yield('content')   
         	<div class="push"></div>     	
         </div>
         <footer>

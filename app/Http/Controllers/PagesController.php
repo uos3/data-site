@@ -15,6 +15,7 @@ class PagesController extends Controller {
 	
 	
 	public function home() {
+		//\Session::flash('status','Noot noot!'); //'flashes' (=shows only once) a notification through the Session ()
 		return view('home');
 	}
 	

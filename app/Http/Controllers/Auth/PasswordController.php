@@ -17,6 +17,8 @@ class PasswordController extends Controller
     | explore this trait and override any methods you wish to tweak.
     |
     */
+    
+    protected $redirectTo = '/profile';
 
     use ResetsPasswords;
 
@@ -28,5 +30,10 @@ class PasswordController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+    }
+	
+	protected function getSendResetLinkEmailSuccessResponse($response)
+    {
+        return redirect()->back()->with('form_status', trans($response));
     }
 }

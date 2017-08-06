@@ -1,31 +1,46 @@
 TODO
 ====
 
-* design homepage
-	- redesign: 'satellite news' = narrow band, 'project intro' = ...? NOT a carousel, internet says they're bad at accessibility
-
-* make Profile page
-	- fields
-	- upload number stats (since XY)
-
-* make About page
-* get some rough content from Alec/Phil	
-
-* design Contribute page
-
-* CHECK AND FIX ACCESSIBILITY
-	
 * user management functionality:
 	- email address validation
-	- delete user account (keep submissions, remove user id) 
+	- delete user account (keep submissions, remove user id)
 
+* make Profile page
+	- fields:
+		- name
+		- organization
+		- place (country/GPS)
+		- hide from leaderboard
+	- upload number stats (since XY)
+	- submit key
+	- generate new submit key
+
+* make homepage
+	- short intro text
+	- data box (with link to separate page)
+
+* make Satellite info page
+	- stuff needed to listen to sat
+
+* make Stats page
+	- last values
+	- table of values
+	- download as csv
+	- graphs
 	
-* list 'art' ideas (or find them - I have a couple noted down... somewhere...)
+* make leaderboard page
+	- list of people with numbers
+	
+* CHECK AND FIX ACCESSIBILITY
 
+* art
 
 
 DONE
 ====
+
+- login (why is it broken???)
+- reset password
 
 - fix login/register layouts (use master.blade.php)
 	
