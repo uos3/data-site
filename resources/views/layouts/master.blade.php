@@ -31,10 +31,18 @@
 		    		</nav>
     				<nav class="user-menu">
 		    			@if (Auth::check())
-		    				<a href="/profile" class="profile-link">{{ Auth::user()->name }}</a> | <a href="/logout" class="logout-link">Log out</a>
+		    				@if (Auth::user()->name == '')
+		    					<a href="/profile" class="profile-link">{{ Auth::user()->email }}</a>
+		    				@else
+		    					<a href="/profile" class="profile-link">{{ Auth::user()->name }}</a>
+		    				@endif
+		    				| <a href="/logout" class="logout-link">Log out</a>
 		    			@else
 		    				<a href="/login" class="login-link">Login</a> | <a href="/register" class="register-link">Register</a>
 		    			@endif
+		    			
+		    			
+		    			
 		    		</nav>
     			</div>
     		</div>	
