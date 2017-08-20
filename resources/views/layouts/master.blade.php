@@ -48,9 +48,17 @@
     		</div>	
     	</header>
     	<div id="wrapper">
-			@if (session('status'))
+			@if (session('success'))
                 <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+           	@elseif (session('status'))
+                <div class="alert alert-info">
                     {{ session('status') }}
+                </div>
+            @elseif (session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
                 </div>
             @endif
         

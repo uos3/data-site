@@ -18,6 +18,11 @@ Route::get('submit',['as'=>'submit','uses'=>'PagesController@submit']);
 Route::post('data/submit','DataController@submit');
 Route::get('data/submit','DataController@redirect');
 
+Route::get('register/verify/{confirmationCode}', [
+    'as' => 'confirmation_path',
+    'uses' => 'Auth\RegistrationController@confirm'
+]);
+
 //Route::get('api','ApiController'); //this registers a group of endpoints - one for each controller method
 
 //since Laravel 5.2.25, this needs to go WITHOUT the 'web' middleware, otherwise messages don't show. 
