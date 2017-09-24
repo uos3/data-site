@@ -15,6 +15,16 @@ class Helper
 		
 		return $key;
 	}
+	
+	/**
+	 * Get user's position on leaderboard.
+	 * 
+	 * @param User $user
+	 * @return int
+	 */
+	public static function getLeaderboardPos(User $user) {
+		return 0;
+	}
 }
 
 

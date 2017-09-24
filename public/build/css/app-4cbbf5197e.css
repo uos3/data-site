@@ -68,8 +68,6 @@ nav ul li {
     color: #1B1464; }
   #main-header nav {
     display: inline-block; }
-  #main-header .menu-col {
-    text-align: right; }
   #main-header .logo {
     margin: 0; }
     #main-header .logo span {
@@ -77,19 +75,24 @@ nav ul li {
       top: 0.1em; }
     #main-header .logo img {
       width: 1.5em; }
-  #main-header .user-menu {
-    color: #bbb;
-    margin-left: 3em; }
-    #main-header .user-menu a {
-      color: inherit; }
-    #main-header .user-menu a:hover, #main-header .user-menu a:focus {
-      color: #2ac1e1; }
-  #main-header .pages-menu ul {
+
+.user-menu {
+  color: #bbb;
+  margin-left: 3em;
+  text-align: right; }
+  .user-menu a {
+    color: inherit; }
+  .user-menu a:hover, .user-menu a:focus {
+    color: #2ac1e1; }
+
+.pages-menu {
+  text-align: right; }
+  .pages-menu ul {
     margin: 0;
     padding: 0; }
-  #main-header .pages-menu li {
+  .pages-menu li {
     padding: 0.5em; }
-    #main-header .pages-menu li a {
+    .pages-menu li a {
       font-size: 1.2em; }
 
 .content {
@@ -112,12 +115,19 @@ footer {
   width: 100%;
   color: #0378A0; }
 
-/*
-     * TODO FIX THE DAMN HEADER.
-     * - make it smaller. It's not as important as the rest of the page!
-     * - SMALLER LOGO. Esp since this isn't a shop. Nothing to sell = no need for brand recognition = logo is pointless. NO LOGO?????
-     * - start designing navigation from mobile. Just 3 elements? WHICH ONES???
-     * - do we need search???? (and if yes, where should it go?)
-     */
+.profile-sidebar ul {
+  list-style: none;
+  padding: 0;
+  line-height: 1.8em; }
+
+#user-data .submit-key dd {
+  font-size: 1.8em;
+  word-wrap: break-word;
+  word-break: break-all;
+  border: 1px solid #98bcdb;
+  border-radius: 5px;
+  padding: 0.3em;
+  background-color: #2ba1e2;
+  color: #005a82; }
 
 /*# sourceMappingURL=app.css.map */

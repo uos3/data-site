@@ -1,9 +1,8 @@
 TODO
 ====
 
-* user management functionality:
-	- email address validation
-	- delete user account (keep submissions, remove user id)
+* download csv of last packet(?)
+
 
 * make Profile page
 	- fields:
@@ -30,6 +29,11 @@ TODO
 	
 * make leaderboard page
 	- list of people with numbers
+
+
+* user management functionality:
+	- delete user account (keep submissions, remove user id)
+
 	
 * CHECK AND FIX ACCESSIBILITY
 

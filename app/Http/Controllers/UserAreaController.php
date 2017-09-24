@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Helpers\Helper;
 
 class UserAreaController extends Controller
 {
@@ -24,6 +26,8 @@ class UserAreaController extends Controller
      */
     public function profile()
     {
-        return view('user.profile');
+    	$user = Auth::user();
+		$leaderboard_position = Helper::getLeaderboardPos($user);
+        return view('user.profile',['user'=>$user,'leaderboard_position'=>$leaderboard_position]);
     }
 }

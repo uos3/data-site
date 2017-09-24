@@ -26,9 +26,6 @@ nav ul li {
     display: inline-block;  
   } 
   
-  .menu-col {
-    text-align:right;
-  }
   .logo {
     margin:0;
     
@@ -42,40 +39,41 @@ nav ul li {
     }
   }
   
-  .user-menu {
-    color:#bbb;
-    margin-left:3em;
-    
-    a {
-      color:inherit;
-    }
-     
-    a:hover, a:focus {
-      color:$color-links-light;
-    }
-  }
-  
-  .pages-menu {
-    
-    ul {
-      margin:0;
-      padding:0;
-    }
-    
-    li {
-      padding:0.5em;
-      
-      a {
-        font-size: 1.2em;
-      }
-    }  
-  }
-  
   
 }
 
+.user-menu {
+  color:#bbb;
+  margin-left:3em;
+  text-align:right;
+  
+  a {
+    color:inherit;
+  }
+   
+  a:hover, a:focus {
+    color:$color-links-light;
+  }
+}
 
+.pages-menu {
+  text-align:right;
+    
+  ul {
+    margin:0;
+    padding:0;
+  }
+  
+  li {
+    padding:0.5em;
+    
+    a {
+      font-size: 1.2em;
+    }
+  }  
+}
 
+//.user-menu for mobile - text-align:center
 
 .content {
   line-height:1.4em;
@@ -100,3 +98,22 @@ footer {
   width:100%;
   color:#0378A0;
 }
+
+.profile-sidebar ul  {
+  list-style: none;
+  padding: 0;
+  line-height: 1.8em;
+}
+
+#user-data .submit-key dd {
+  font-size: 1.8em;
+  word-wrap: break-word;
+  word-break: break-all;
+  border: 1px solid #98bcdb;
+  border-radius: 5px;
+  padding: 0.3em;
+  background-color: #2ba1e2;
+  color: #005a82;
+}
+
+
