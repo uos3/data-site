@@ -7,8 +7,8 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Register</div>
                 <div class="panel-body">
-                	@if (session('form_notice'))
-                        <div class="alert alert-notice">
+                	@if (session('form_success'))
+                        <div class="alert alert-info">
                             {{ session('form_success') }}
                         </div>
                     @endif
