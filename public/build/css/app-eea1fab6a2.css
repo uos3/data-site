@@ -128,8 +128,12 @@ footer {
   padding: 0;
   line-height: 1.8em; }
 
-#user-data .submit-key dd {
+#submit-key-block {
+  margin-bottom: 1em; }
+
+#submit-key {
   font-size: 1.8em;
+  line-height: 1.3;
   word-wrap: break-word;
   word-break: break-all;
   border: 1px solid #98bcdb;
