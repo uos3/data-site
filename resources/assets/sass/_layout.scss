@@ -44,16 +44,27 @@ nav ul li {
 
 .user-menu {
   color:#bbb;
-  margin-left:3em;
   text-align:right;
   
   a {
+	display:inline-block;
     color:inherit;
+    line-height: 4em;
   }
    
   a:hover, a:focus {
     color:$color-links-light;
   }
+}
+
+.menu-col {
+	text-align:center;
+}
+
+@media #{$b-sm-up} {
+   .menu-col {
+		text-align:right !important;
+	}
 }
 
 .pages-menu {

@@ -13,7 +13,7 @@
     <body class="page-welcome">
     	<header id="main-header" class="container-fluid">
     		<div class="row">
-    			<div class="col-md-2 col-sm-8 logo-col">
+    			<div class="col-md-3 col-sm-3 logo-col">
     				<a href="/">
 	    				<h1 class="logo">
 		    				<img src="/img/uos3-logo-only_bright.png">
@@ -21,14 +21,17 @@
 		    			</h1>
 	    			</a>
     			</div>
-    			<div class="col-md-10 col-sm-4 menu-col">
-    				<nav class="pages-menu">
+    			<div class="col-md-7 col-sm-7 menu-col">
+					<nav class="pages-menu">
 		    			<ul>
 		    				<li><a href="/satellite-info">Satellite info</a></li>
 		    				<li><a href="/satellite-info">Stats</a></li>
 		    				<li><a href="/satellite-info">Leaderboard</a></li>
 		    			</ul>
 		    		</nav>
+				</div>
+    			<div class="col-md-2 col-sm-2 menu-col">
+    				
     				<nav class="user-menu">
 		    			@if (Auth::check())
 		    				@if (Auth::user()->name == '')

@@ -78,12 +78,20 @@ nav ul li {
 
 .user-menu {
   color: #bbb;
-  margin-left: 3em;
   text-align: right; }
   .user-menu a {
-    color: inherit; }
+    display: inline-block;
+    color: inherit;
+    line-height: 4em; }
   .user-menu a:hover, .user-menu a:focus {
     color: #2ac1e1; }
+
+.menu-col {
+  text-align: center; }
+
+@media only screen and (min-width: 768px) {
+  .menu-col {
+    text-align: right !important; } }
 
 .pages-menu {
   text-align: right; }
