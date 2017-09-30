@@ -27,6 +27,10 @@ class PagesController extends Controller {
 		return view('about')->with("version",'<strong style="color:red">1</strong>');
 	}
 	
+	public function leaderboard() {
+		return view('leaderboard');
+	}
+	
 	public function submit() {
 		return 'this will be a page about submitting';
 	}

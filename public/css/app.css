@@ -142,4 +142,10 @@ footer {
   background-color: #2ba1e2;
   color: #005a82; }
 
+#user-data dd, #user-data dt {
+  display: inline; }
+
+.user-data__public strong {
+  color: #0090ba; }
+
 /*# sourceMappingURL=app.css.map */

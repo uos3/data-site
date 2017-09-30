@@ -19,20 +19,19 @@
 				<p id="submit-key">{{$user->submit_key}}</p>				
 			</div>
 			
-			<form id="user-data" method="POST">
-				<div class="form-group">
-					<label for="input-name">Name:</label>
-					<input type="text" class="form-control" id="input-name" name="name">
-				</div>
-				<div class="form-group">
-					<label for="input-affiliation">Affiliation (e.g. school, club, etc.):</label>
-					<input type="text" class="form-control"  id="input-affiliation" name="affiliation">
-				</div>
-				<div class="form-group">
-					<label>Show me on the leaderboard: <input type="checkbox" id="input-public" name="public"></label>	
-				</div>
-				<input type="submit" class="btn btn-default" value="Save changes">
-			</form>
+			<dl id="user-data">
+				<h3>User Info</h3>
+				<p class="user-data__name"><dt>Name:</dt> <dd>{{$user->name}}</dd></p>
+				<p class="user-data__affiliation"><dt>Affiliation (e.g. school, club, etc.):</dt> <dd>{{$user->affiliation}}</dd></p>
+				<p class="user-data__public"><dt>Display on the leaderboard: </dt>
+				@if ($user->public)
+					<dd>YES</dd>
+				@else
+					<dd>NO</dd>
+				@endif
+				</p>
+				<a class="btn btn-default" href="/profile/edit">Edit</a>
+			</dl>
 		</div>			
 	</div>
 	    		        		

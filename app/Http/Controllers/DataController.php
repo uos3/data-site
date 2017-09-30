@@ -22,7 +22,7 @@ class DataController extends Controller
 		
 		//error_log("says appkey is this: ".$request->app_key);
 		//error_log("env appkey is this: ".env('APP_KEY'));
-		
+			
 		if (!isset($request->app_key)) {
 			abort(401, 'No app key supplied.'); //authenticate
 		} 

@@ -132,4 +132,11 @@ footer {
   color: #005a82;
 }
 
+#user-data dd, #user-data dt {
+    display: inline;
+}
+
+.user-data__public strong {
+	color:$color-highlight-blue;
+}
 

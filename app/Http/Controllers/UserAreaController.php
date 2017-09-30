@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use App\Http\Requests;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\Helper;
+use App\User;
 
 class UserAreaController extends Controller
 {
@@ -24,10 +27,81 @@ class UserAreaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function profile()
+    public function index()
+    {
+		$user = Auth::user();
+		return view('user.profile',['user'=>$user]);
+    }
+    
+    
+    /**
+     * Save profile form
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Request $request)
     {
     	$user = Auth::user();
-		$leaderboard_position = Helper::getLeaderboardPos($user);
-        return view('user.profile',['user'=>$user,'leaderboard_position'=>$leaderboard_position]);
+    	
+    	$fields = [
+			'name'=> $this->oldOrNew($request,$user,'name'),
+			'affiliation'=> $this->oldOrNew($request,$user,'affiliation'),
+			'public'=> $this->oldOrNew($request,$user,'public'),
+    	];
+    	
+		return view('user.edit',['user'=>$user,'fields'=>$fields]);
+		
+		
     }
+    
+    public function save(Request $request) {
+		
+		$user = Auth::user();
+		
+		error_log(print_r($request->all(),true));
+		
+		$data = $request->all();
+		
+		$data['public'] = (isset($data['public']))?$data['public']:0;
+		
+		$rules = [
+			'name'=>'required_if:public,1|string',
+			'affiliation'=>'string',
+			'public'=>'boolean'
+    	];
+    	
+    	$messages = [
+			'name.required_if' => 'You have to supply a name if you want to show up on the leaderboard.'
+    	];
+    	
+    	$validator = Validator::make($data,$rules,$messages);
+    	
+    	//According to the docs, custom validators should have method validate(). They do not. Therefore, this.
+    	if ($validator->fails()) {
+			return redirect('profile/edit')
+                        ->withErrors($validator)
+                        ->withInput();
+		};
+		
+		$user->update([
+			'name'=> $data['name'],
+			'affiliation'=>$data['affiliation'],
+			'public'=>$data['public'],
+		]);
+		//update db
+			//save name
+		//
+		error_log('this is the part where we save the data');
+    
+		return redirect('profile');
+	}
+    
+    private function oldOrNew($request,$user,$param) {
+		if ($request->old($param) === null) {
+			return $user->$param;
+		} else {
+			return $request->old($param);
+		}
+	}
+    
 }

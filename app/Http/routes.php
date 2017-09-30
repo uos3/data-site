@@ -13,7 +13,9 @@
 
 Route::get('/','PagesController@home');
 Route::get('satellite-info','PagesController@satellite_info');
+Route::get('leaderboard','PagesController@leaderboard');
 Route::get('submit',['as'=>'submit','uses'=>'PagesController@submit']);
+
 
 Route::post('data/submit','DataController@submit');
 Route::get('data/submit','DataController@redirect');
@@ -27,4 +29,6 @@ Route::get('register/verify/{confirmationCode}', [
 
 //since Laravel 5.2.25, this needs to go WITHOUT the 'web' middleware, otherwise messages don't show. 
 Route::auth();
-Route::get('/profile','UserAreaController@profile');
+Route::get('/profile','UserAreaController@index');
+Route::get('/profile/edit','UserAreaController@edit');
+Route::post('/profile/edit','UserAreaController@save');
