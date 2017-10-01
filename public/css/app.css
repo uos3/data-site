@@ -148,4 +148,10 @@ footer {
 .user-data__public strong {
   color: #0090ba; }
 
+#leaderboard {
+  max-width: 60em;
+  margin: 1em auto;
+  background-color: white;
+  border: 1px solid #eee; }
+
 /*# sourceMappingURL=app.css.map */

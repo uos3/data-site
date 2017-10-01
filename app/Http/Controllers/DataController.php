@@ -70,8 +70,13 @@ class DataController extends Controller
 			$errors = $validator->errors()->all();
 			return "Failure. ".implode(' ', $errors)."\n";
 		} else {
-			$submission = new Submission($data);
+			$submission = new Submission($data);	
 			$submission->save();
+			
+			if (isset($data['user_id'])) {
+				$user->upload_count = $user->upload_count + 1;
+				$user->save();
+			};
 			return "Success.";
 		}
     }

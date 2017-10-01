@@ -2,6 +2,7 @@
 
 
 use Illuminate\Support\Facades\Auth;
+use App\User;
 
 /**
  * 
@@ -28,7 +29,8 @@ class PagesController extends Controller {
 	}
 	
 	public function leaderboard() {
-		return view('leaderboard');
+		$public_users = User::where('public',1)->orderBy('upload_count','desc')->get();
+		return view('leaderboard')->with("users",$public_users);
 	}
 	
 	public function submit() {
