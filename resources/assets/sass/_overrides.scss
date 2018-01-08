@@ -1,0 +1,34 @@
+/* SASS OVERRIDES */
+
+//** Background color for `<body>`.
+$body-bg:               #f5f5f5;
+//** Global text color on `<body>`.
+$text-color:            #333;
+
+$font-family-base:       'Raleway', sans-serif;
+
+$headings-font-family:   'Coda', sans-serif;
+
+
+//** Global textual link color.
+$link-color:            #005A82;
+//** Link hover color set via `darken()` function.
+$link-hover-color:      darken($link-color, 15%); //#1B1464
+//** Link hover decoration.
+$link-hover-decoration: none;
+
+$navbar-default-bg:                #fff;
+$navbar-default-border:            none;
+
+// Basics of a navbar
+$navbar-height:                    60px !default;
+$navbar-default-color:             $link-color;
+
+// Navbar links
+$navbar-default-link-color:                $link-color;
+$navbar-default-link-hover-color:          $link-hover-color;
+$navbar-default-link-hover-bg:             transparent !default;
+$navbar-default-link-active-color:         #555 !default;
+$navbar-default-link-active-bg:            darken($navbar-default-bg, 6.5%) !default;
+$navbar-default-link-disabled-color:       #ccc !default;
+$navbar-default-link-disabled-bg:          transparent !default;

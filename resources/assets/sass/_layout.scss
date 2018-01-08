@@ -8,9 +8,35 @@ body {
   margin: 0;
   padding-bottom: 5em;
   min-height: 100%;
-  background-color:#f5f5f5;
 
 }
+
+
+.navbar-default {
+  font-family:$headings-font-family;
+}
+
+.navbar-brand {
+  padding:0;
+
+  div, img {
+    display:inline-block;
+  }
+
+  img {
+    position:absolute;
+    width:75px;
+  }
+
+  div {
+    padding: 12px $navbar-padding-vertical  $navbar-padding-horizontal  $navbar-padding-vertical;
+    margin-left:3em;
+  }
+}
+
+
+
+
 
 nav ul li {
   margin:0;
@@ -18,15 +44,13 @@ nav ul li {
   display:inline-block;
 }
 
+
+
 #main-header {
   z-index:9000;
   background-color:white;
   padding:0 1em;
   line-height: 4em;
-
-  a {
-    color:$color-links;
-  }
 
   a:hover {
       color:#1B1464;
@@ -37,24 +61,7 @@ nav ul li {
     display: inline-block;
   }
 
-  .logo {
-    margin:0;
 
-    div {
-      display:inline-block;
-      position:relative;
-      margin-left: 3.5em;
-      font-size: 0.7em;
-      top: 0.3em;
-
-    }
-
-    img {
-      //width:1.5em;
-      position:absolute;
-
-    }
-  }
   .user-menu {
     color:#bbb;
     text-align:right;

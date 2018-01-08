@@ -2,7 +2,6 @@
 <html>
     <head>
         <title>UoS³{{ isset($title) ? " -- ".$title : '' }}</title>
-        <link rel="stylesheet" href="/css/bootstrap.css">
         <link rel="stylesheet" href="{{ elixir("css/app.css") }}">
 	<link href="https://fonts.googleapis.com/css?family=Coda|Raleway:400,400i,700" rel="stylesheet">
 	<meta name="robots" content="noindex">
@@ -11,47 +10,48 @@
     </head>
 
     <body class="page-welcome">
-    	<header id="main-header" class="container-fluid">
-    		<div class="row">
-    			<div class="col-md-3 col-sm-3 logo-col">
-    				<a href="/">
-	    				<h1 class="logo">
-		    				<img src="/img/uos3.png">
-		    				<div>Data</div>
-		    			</h1>
-	    			</a>
-    			</div>
-    			<div class="col-md-7 col-sm-7 menu-col">
-					<nav class="pages-menu">
-		    			<ul>
-		    				<li><a href="/satellite-info">Satellite info</a></li>
-		    				<li><a href="/collected-data">Collected data</a></li>
-		    				<li><a href="/leaderboard">Leaderboard</a></li>
-                <li><a href="http://uos3.space">About UoS<sup>3</sup></a></li>
-		    			</ul>
-		    		</nav>
-				</div>
-    			<div class="col-md-2 col-sm-2 menu-col">
+      <nav class="navbar navbar-default navbar-static-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand logo" href="#"><img src="/img/uos3.png">
+          <div>Data<br />Storage</div></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <p class="navbar-text navbar-right">
 
-    				<nav class="user-menu">
-		    			@if (Auth::check())
-		    				@if (Auth::user()->name == '')
-		    					<a href="/profile" class="profile-link">{{ Auth::user()->email }}</a>
-		    				@else
-		    					<a href="/profile" class="profile-link">{{ Auth::user()->name }}</a>
-		    				@endif
-		    				| <a href="/logout" class="logout-link">Log out</a>
-		    			@else
-		    				<a href="/login" class="login-link">Login</a> | <a href="/register" class="register-link">Register</a>
-		    			@endif
-
-
-
-		    		</nav>
-    			</div>
-    		</div>
-    	</header>
-    	<div id="wrapper">
+            </p>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a class="active" href="/satellite-info">Satellite info</a></li>
+              <li><a href="/collected-data">Collected data</a></li>
+              <li><a href="/leaderboard">Leaderboard</a></li>
+              <li><a href="http://uos3.space">About UoS<sup>3</sup></a></li>
+              @if (Auth::check())
+                @if (Auth::user()->name == '')
+                  <?php $usermenu_label=Auth::user()->email ?>
+                @else
+                  <?php $usermenu_label=Auth::user()->name ?>
+                @endif
+                <li class="dropdown">
+                  <a href="/Profile" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ $usermenu_label }} <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/profile">Profile</a></li>
+                    <li><a href="/logout">Log out</a></li>
+                  </ul>
+                </li>
+              @else
+                    <li><a href="/login" class="login-link">Log in</a></li>
+              @endif
+            </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <div id="wrapper">
 			@if (session('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}
@@ -71,5 +71,7 @@
     <footer class="footer">
 		    <p>© 2016 UoS³. All Rights Reserved.</p>
 		</footer>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
     </body>
 </html>

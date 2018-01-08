@@ -1,8 +1,11 @@
+
+@import '_overrides.scss'; //colors etc
+
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
 @import '_resets.scss'; //resets
 
 @import '_utils.scss'; //mixins, variables, etc.
-
-@import '_typography.scss'; //fonts, type colors, basic line-height...
 
 @import '_layout.scss'; //layout
 
@@ -13,4 +16,4 @@
 
 //small
 //medium
-//large 
+//large
