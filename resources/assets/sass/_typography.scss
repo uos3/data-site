@@ -6,9 +6,9 @@ body {
 h1, h2, h3, h4, h5, #main-header {
   font-family: 'Coda', sans-serif;
 }
-    
 
-    
+
+
 
 
 a {
@@ -20,7 +20,6 @@ a:visited {
 }
 
 a:hover, a:active, a:focus {
-  color:rgb(37, 176, 218)
-          
-} 
+  color:$color-links-dark;
 
+}

@@ -13,6 +13,7 @@
 
 Route::get('/','PagesController@home');
 Route::get('satellite-info','PagesController@satellite_info');
+Route::get('collected-data','PagesController@collected_data');
 Route::get('leaderboard','PagesController@leaderboard');
 Route::get('submit',['as'=>'submit','uses'=>'PagesController@submit']);
 
@@ -27,7 +28,7 @@ Route::get('register/verify/{confirmationCode}', [
 
 //Route::get('api','ApiController'); //this registers a group of endpoints - one for each controller method
 
-//since Laravel 5.2.25, this needs to go WITHOUT the 'web' middleware, otherwise messages don't show. 
+//since Laravel 5.2.25, this needs to go WITHOUT the 'web' middleware, otherwise messages don't show.
 Route::auth();
 Route::get('/profile','UserAreaController@index');
 Route::get('/profile/edit','UserAreaController@edit');
