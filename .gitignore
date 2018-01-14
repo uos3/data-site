@@ -7,3 +7,5 @@ Homestead.json
 .project
 _ide_helper.php
 .settings
+*.save
+*.swp
