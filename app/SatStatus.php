@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SatStatus extends Model
 {
-	protected $table = 'STATUS';
+	protected $table = 'sat_status';
 	/**
      * The attributes that are mass assignable.
      *

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SatGPS extends Model
 {
-	protected $table = 'GPS';
+	protected $table = 'sat_gps';
 	/**
      * The attributes that are mass assignable.
      *

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SatIMU extends Model
 {
-	protected $table = 'IMU';
+	protected $table = 'sat_imu';
 	/**
      * The attributes that are mass assignable.
      *

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SatIMG extends Model
 {
-	protected $table = 'IMG';
+	protected $table = 'sat_img';
 	/**
      * The attributes that are mass assignable.
      *
