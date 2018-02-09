@@ -1,9 +1,5 @@
 <?php
 
-/*
-
-TODO MIGRATION!
-*/
 
 namespace App;
 

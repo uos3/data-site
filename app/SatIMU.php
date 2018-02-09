@@ -1,10 +1,5 @@
 <?php
 
-/*
-
-TODO MIGRATION!
-*/
-
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
