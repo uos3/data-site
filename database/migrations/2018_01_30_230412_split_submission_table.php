@@ -38,8 +38,8 @@ class SplitSubmissionTable extends Migration
         $table->decimal('battery_current',10,4)->nullable();
         $table->decimal('charge_current',10,4)->nullable();
         $table->boolean('antenna_deployment')->nullable();
-        $table->integer('data_pending')->unsigned();
-        $table->integer('reboot_count')->unsigned();
+        $table->integer('data_pending')->unsigned()->nullable();
+        $table->integer('reboot_count')->unsigned()->nullable();
         $table->string('rails_status',6)->nullable();
         $table->smallInteger('rx_temperature')->nullable();
         $table->smallInteger('tx_temperature')->nullable();

@@ -26,4 +26,14 @@ class Submission extends Model
 		'server_time' => 'required|date_format:Y-m-d H:i:s',
 		'user_id' => 'integer|exists:users,id',
 	];
+
+	public function binary()
+	{
+		return $this->hasOne('App\SubmissionBinary');
+	}
+
+	public function packet()
+	{
+		return $this->belongsTo('App\Packet');
+	}
 }
