@@ -34,11 +34,31 @@ class Packet extends Model
 
 	public function sat_config()
 	{
-		return $this->hasOne('App\SatConfig','id','config_table_id');
+		return $this->hasOne('App\SatConfig');
 	}
 
 	public function sat_status()
 	{
-		return $this->hasOne('App\SatStatus','id','status_table_id');
+		return $this->hasOne('App\SatStatus');
+	}
+
+	public function sat_health()
+	{
+		return $this->hasOne('App\SatHealth');
+	}
+
+	public function sat_gps()
+	{
+		return $this->hasOne('App\SatGPS');
+	}
+
+	public function sat_imu()
+	{
+		return $this->hasOne('App\SatIMU');
+	}
+
+	public function sat_img()
+	{
+		return $this->hasOne('App\SatIMG');
 	}
 }
