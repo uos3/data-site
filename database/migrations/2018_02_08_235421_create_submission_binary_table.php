@@ -12,6 +12,10 @@ class CreateSubmissionBinaryTable extends Migration
      */
     public function up()
     {
+      Schema::create('submissions_binary', function (Blueprint $table) {
+        $table->integer('submission_id')->unique();
+        $table->binary('data');
+      });
         //submission_id (unique)
         //data
     }
@@ -23,6 +27,7 @@ class CreateSubmissionBinaryTable extends Migration
      */
     public function down()
     {
+      Schema::dropIfExists('submissions_binary');
         //
     }
 }

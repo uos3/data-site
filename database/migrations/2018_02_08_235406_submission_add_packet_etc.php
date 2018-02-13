@@ -12,8 +12,11 @@ class SubmissionAddPacketEtc extends Migration
      */
     public function up()
     {
-        //packet_id
-        //checksum_success (if 0, no packet or sat_ tables populated - only as reference)
+      Schema::table('submissions', function (Blueprint $table) {
+        $table->integer('packet_id')->unique();
+        $table->boolean('checksum_success')->default(FALSE);
+      });
+      //checksum_success (if 0, no packet or sat_ tables populated - only as reference)
     }
 
     /**
@@ -23,6 +26,8 @@ class SubmissionAddPacketEtc extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('submissions', function (Blueprint $table) {
+          $table->dropColumn(['packet_id','checksum_success']);
+        });
     }
 }

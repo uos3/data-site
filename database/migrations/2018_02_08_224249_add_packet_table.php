@@ -14,18 +14,21 @@ class AddPacketTable extends Migration
     {
         Schema::create('packets',function (Blueprint $table) {
           $table->increments('id')->unique();
-          //status_table_id
-          //status_sequence_id
-          //health_table_id
-          //health_sequence_id
-          //imu_table_id
-          //imu_sequence_id
-          //img_table_id
-          //img_sequence_id
-          //gps_table_id
-          //gps_sequence_id
-          //config_table_id
-          //config_sequence_id
+          $table->integer('status_table_id')->unsigned()->unique();
+          $table->integer('status_sequence_id')->unsigned();
+          $table->integer('health_table_id')->unsigned()->unique()->nullable();
+          $table->integer('health_sequence_id')->unsigned()->nullable();
+          $table->integer('imu_table_id')->unsigned()->unique()->nullable();
+          $table->integer('imu_sequence_id')->unsigned()->nullable();
+          $table->integer('img_table_id')->unsigned()->unique()->nullable();
+          $table->integer('img_sequence_id')->unsigned()->nullable();
+          $table->integer('gps_table_id')->unsigned()->unique()->nullable();
+          $table->integer('gps_sequence_id')->unsigned()->nullable();
+          $table->integer('config_table_id')->unsigned()->unique()->nullable();
+          $table->integer('config_sequence_id')->unsigned()->nullable();
+          //checksum
+          //hash
+          
         });
     }
 
@@ -36,6 +39,6 @@ class AddPacketTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('packets');
     }
 }
