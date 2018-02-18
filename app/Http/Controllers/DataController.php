@@ -25,7 +25,7 @@ class DataController extends Controller
     }
 
     private function validateAppKey($app_key) {
-      if ($app_key == '') {
+      if ($app_key !== env('APP_KEY',null)) {
           return false;
   		}
       else {
@@ -168,7 +168,7 @@ class DataController extends Controller
         return response('Upload failed, checksum incorrect.',400);
       }
 
-      
+
 
       //save status
 
