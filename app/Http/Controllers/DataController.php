@@ -24,15 +24,36 @@ class DataController extends Controller
     public function __construct() {
     }
 
+    private function validateAppKey($app_key) {
+      if ($app_key == '') {
+          return false;
+  		}
+      else {
+        return true;
+      }
+    }
+
+    private function validateIP($ip) {
+      if (BlacklistedIP::where("ip_address", "=", $ip)->first() instanceof BlacklistedIP) {
+  			return false; //lolnope.
+  		}
+      else {
+        return true;
+      }
+    }
 
     private function validateAccess(Request $request) {
+      //error_log("says appkey is this: ".$request->app_key);
+  		//error_log("env appkey is this: ".env('APP_KEY'));
 
-      if (!isset($request->app_key)) {
+      $app_key = $request->input('app_key');
+      if ($app_key == '') {
+
   			abort(401, 'No app key supplied.'); //authenticate
   		}
 
-  		if (env('APP_KEY') != $request->app_key) {
-  			abort(401, 'Supplied app key "'.$request->app_key.'" is incorrect.'); //REauthenticate
+  		if (env('APP_KEY') != $app_key) {
+  			abort(401, 'Supplied app key "'.$app_key.'" is incorrect.'); //REauthenticate
   		}
 
       //get submitter's ip
@@ -47,19 +68,18 @@ class DataController extends Controller
       return TRUE;
     }
 
-    private function getUserIfExists(Request $request) {
-      //is submit_key set? if yes: get user
-  		if (isset($request->submit_key) && "" != $request->submit_key) {
-  			$user = User::where("submit_key","=",$request->submit_key)->first();
 
-  			//if submit_key wrong, throw error (shouldn't accidentally upload anonymous data if the key is wrong...)
-  			if (!($user instanceof User)) {
-  				abort(401,"No user with this submit key found.");
-  			}
+
+    private function getUserIfExists($submit_key) {
+      $user = User::where("submit_key","=",$submit_key)->first();
+
+      //if submit_key wrong, throw error (shouldn't accidentally upload anonymous data if the key is wrong...)
+      if (!($user instanceof User)) {
+        return false;
+        //abort(401,"No user with this submit key found.");
+      } else {
         return $user;
-  		}
-
-      return FALSE; //no submit key
+      }
     }
 
     private function validateUser($user) {
@@ -86,6 +106,8 @@ class DataController extends Controller
         'hash'=>'',
         'checksum'=>'',
       ];
+      $data = false;
+      /*
 
       //use a Validator to validate all the values. Maybe several validator for the data parts, build them elsewhere, and reuse them???
       $validator = Validator::make($data,[
@@ -95,6 +117,7 @@ class DataController extends Controller
       if ($validator->fails()) {
         return "things went bad";
       }
+      */
 
       //maybe instead: validate the fields inside the C++ parser, so I don't have to bother here?
       //...why am I even validating? if the hash and CRC matches, the values MUST be correct, right?
@@ -103,50 +126,69 @@ class DataController extends Controller
     }
 
     public function submit(Request $request) {
-      //
-      //JSON input
+
+      $app_key = $request->input('app_key');
+      if (!$this->validateAppKey($app_key)) {
+        return response("No app key supplied.",401);
+      }
+
+      $ip = $request->ip();
+      if (!$this->validateIP($ip)) {
+        return response("Access denied.",403);
+      }
+
+      $submit_key = $request->input('submit_key');
+      if ($submit_key != '') {
+        $user = $this->getUserIfExists($submit_key);
+        if ($user === false) {
+          return response("No user with this submit key found. Wrong submit key?",401);
+        }
+
+        if (!$this->validateUser($user)) {
+          return response("Access denied.",403);
+        }
+        $user_id = $user->id;
+      } else {
+        $user_id = null;
+      }
+
+      $data_encoded = $request->input("data");
+      $data = $this->parseBinary($data_encoded);
+
+      if (!$data) {
+        $submission = new Submission([
+          'server_time'=> Carbon::now()->toDateTimeString(),
+          'user_id'=> $user_id,
+          'ip_address'=>$ip,
+          'packet_id'=>null,
+          'checksum_success'=>false,
+        ]);
+        $submission->save();
+
+        return response('Upload failed, checksum incorrect.',400);
+      }
+
+      
+
+      //save status
+
+      //get packet type
+
+      //save secondary table
 
 
-    	//if submission's api key isn't correct, abort.
-
-		//error_log("says appkey is this: ".$request->app_key);
-		//error_log("env appkey is this: ".env('APP_KEY'));
+      return "Fake success.";
 
 
-
-    //$this->validateAccess($request);
-
-    //$user = $this->getUserIfExists();
-
-    /*if ($user) {
-        $this->validateUser($user);
-    }*/
     //Log::info("TEST");
-    $app_key = $request->input("app_key");
-    $submit_key = $request->input("submit_key");
 
-    $data_encoded = $request->input("data");
-    $data = $this->parseBinary($data_encoded);
 
-    return "Fake Success. App key: ".$app_key.", submit key: ".$submit_key;
 
     //TODO pick which type of upload this is (one-character type number? -- set in .env, no magic numbers!)
 
     //TODO submit data to sat_status + sat_? depending on type (how do I save all the columns without listing them out, but also without silently ignoring failures?)
 
-
-
-
-		//add computed values
-		$data['uploaded_at'] = Carbon::now()->toDateTimeString();
-		$data['ip_address'] = $ip;
-
-		//if user is authenticated add their id:
-		if (isset($user) && ($user instanceof User)) {
-			$data['user_id'] = $user->id; //otherwise keep NULL
-		}
-
-		//validate
+	//validate
 		$validator = Validator::make($data,Submission::$validation_rules);
 		if ($validator->fails()) {
 			$errors = $validator->errors()->all();
