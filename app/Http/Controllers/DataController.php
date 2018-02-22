@@ -105,8 +105,15 @@ class DataController extends Controller
       $data = [
         'hash'=>'',
         'checksum'=>'',
+        'downlink_time'=>'',
+        'payload_type'=>'a',
+        'spacecraft_id'=>'x',
+        'spacecraft_time'=>'2018-02-18 21:00:00',
+        'time_source'=>'x',
+        'not_actually_a_value'=>'x'
+
       ];
-      $data = false;
+      //$data = false;
       /*
 
       //use a Validator to validate all the values. Maybe several validator for the data parts, build them elsewhere, and reuse them???
@@ -168,6 +175,13 @@ class DataController extends Controller
         return response('Upload failed, checksum incorrect.',400);
       }
 
+      //TODO identify packet!
+      
+
+      $sat_status = new SatStatus($data);
+      $sat_status->save();
+
+      return "Fake success.";
 
 
       //save status
@@ -176,33 +190,20 @@ class DataController extends Controller
 
       //save secondary table
 
+      //if submission is okay, increase user's upload count
 
-      return "Fake success.";
+      if (isset($data['user_id'])) {
+				$user->upload_count = $user->upload_count + 1;
+				$user->save();
+			};
+
+      return "Success.";
 
 
     //Log::info("TEST");
 
 
 
-    //TODO pick which type of upload this is (one-character type number? -- set in .env, no magic numbers!)
-
-    //TODO submit data to sat_status + sat_? depending on type (how do I save all the columns without listing them out, but also without silently ignoring failures?)
-
-	//validate
-		$validator = Validator::make($data,Submission::$validation_rules);
-		if ($validator->fails()) {
-			$errors = $validator->errors()->all();
-			return "Failure. ".implode(' ', $errors)."\n";
-		} else {
-			$submission = new Submission($data);
-			$submission->save();
-
-			if (isset($data['user_id'])) {
-				$user->upload_count = $user->upload_count + 1;
-				$user->save();
-			};
-			return "Success.";
-		}
     }
 
 	/**
