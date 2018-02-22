@@ -26,9 +26,12 @@ class AddPacketTable extends Migration
           $table->integer('gps_sequence_id')->unsigned()->nullable();
           $table->integer('config_table_id')->unsigned()->unique()->nullable();
           $table->integer('config_sequence_id')->unsigned()->nullable();
+          $table->timestamp('last_submitted')->useCurrent();
+          $table->string('checksum');
+          $table->string('hash');
           //checksum
           //hash
-          
+
         });
     }
 

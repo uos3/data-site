@@ -18,9 +18,9 @@ class SplitSubmissionTable extends Migration
       //Recreate submissions table.
       Schema::create('submissions',function (Blueprint $table) {
         $table->increments('id')->unique();
-        $table->timestamp('server_time'); //set on save
+        $table->timestamp('server_time')->useCurrent(); //set on save
         $table->integer('user_id')->unsigned()->nullable();
-        $table->timestamp('downlink_time');
+        $table->timestamp('downlink_time')->useCurrent();
         $table->string('ip_address',45);
         $table->mediumInteger('sequence_id')->unsigned();
         $table->string('payload_type',1);
@@ -28,8 +28,8 @@ class SplitSubmissionTable extends Migration
 
       Schema::create('sat_status',function (Blueprint $table) {
         $table->integer('submission_id')->unsigned()->unique();
-        $table->timestamp('downlink_time');
-        $table->timestamp('spacecraft_time');
+        $table->timestamp('downlink_time')->useCurrent();
+        $table->timestamp('spacecraft_time')->useCurrent();
         $table->boolean('time_source')->nullable();
         $table->string('spacecraft_id')->nullable(); //SCID -- do we even need this in the database..?
         $table->decimal('obc_temperature',10,4)->nullable();
@@ -167,7 +167,7 @@ class SplitSubmissionTable extends Migration
 
       Schema::create('submissions', function (Blueprint $table) {
           $table->increments('id');
-          $table->timestamp('uploaded_at');
+          $table->timestamp('uploaded_at')->useCurrent();
           $table->integer('user_id')->unsigned();
 
           $table->decimal('battery_voltage', 6, 3);
