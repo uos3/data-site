@@ -18,21 +18,38 @@ class Packet extends Model
      * @var array
      */
 
-  protected $guarded = [
-    'timestamp',
+  protected $fillable = [
+    'status_table_id',
+		'status_sequence_id',
+		'health_table_id',
+		'health_sequence_id',
+		'imu_table_id',
+		'imu_sequence_id',
+		'img_table_id',
+		'img_sequence_id',
+		'gps_table_id',
+		'gps_sequence_id',
+		'config_table_id',
+		'config_sequence_id',
+		'last_submitted',
+		'checksum',
+		'hash',
   ];
 
 	public $timestamps = false; //needed because I'm not using the default timestamp columns (updated_at, created_at), and otherwise php artisan tinker craps itself.
 
 	public static $validation_rules = [];
 
-	const PAYLOAD_CONFIG = 'a';
-	const PAYLOAD_GPS = 'b';
-	const PAYLOAD_HEALTH = 'c';
-	const PAYLOAD_IMG = 'd';
-	const PAYLOAD_IMU = 'e';
-	const PAYLOAD_STATUS = 'f';
-
+	const P_CONFIG_CODE = 'a';
+	const P_CONFIG_COLUMN = 'config_sequence_id';
+	const P_GPS_CODE = 'b';
+	const P_GPS_COLUMN = 'gps_sequence_id';
+	const P_HEALTH_CODE = 'c';
+	const P_HEALTH_COLUMN = 'health_sequence_id';
+	const P_IMG_CODE = 'd';
+	const P_IMG_COLUMN = 'img_sequence_id';
+	const P_IMU_CODE = 'e';
+	const P_IMU_COLUMN = 'imu_sequence_id';
 
 	public function submission()
 	{

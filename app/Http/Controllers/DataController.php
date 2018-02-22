@@ -18,6 +18,7 @@ use App\SatHealth;
 use App\SatIMG;
 use App\SatStatus;
 use App\BlacklistedIP;
+use App\Packet;
 
 class DataController extends Controller
 {
@@ -101,17 +102,21 @@ class DataController extends Controller
       //feed the hash to the C++ parser
       //
 
-      //STUB
       $data = [
+        'payload_type'=>'a',
+        'status'=> [
+            'sequence_id'=>4,
+            'spacecraft_id'=>'x',
+            'spacecraft_time'=>'2018-02-18 21:00:00',
+            'time_source'=>'x',
+            'not_actually_a_value'=>'x'
+        ],
+        'payload' => [
+            'tx_enable'=>true,
+            'sequence_id'=>6,
+        ],
         'hash'=>'',
         'checksum'=>'',
-        'downlink_time'=>'',
-        'payload_type'=>'a',
-        'spacecraft_id'=>'x',
-        'spacecraft_time'=>'2018-02-18 21:00:00',
-        'time_source'=>'x',
-        'not_actually_a_value'=>'x'
-
       ];
       //$data = false;
       /*
@@ -159,6 +164,7 @@ class DataController extends Controller
         $user_id = null;
       }
 
+      $downlink_time = $request->input('downlink_time'); //this isn't in the binary
       $data_encoded = $request->input("data");
       $data = $this->parseBinary($data_encoded);
 
@@ -172,14 +178,76 @@ class DataController extends Controller
         ]);
         $submission->save();
 
+        $binary = new SubmissionBinary([
+          'data'=> $data_encoded,
+          'submission_id'=>$submission->id,
+        ]);
+        $binary->save();
+
         return response('Upload failed, checksum incorrect.',400);
       }
 
-      //TODO identify packet!
-      
+      $status_seq_id = $data['status']['sequence_id'];
+      $secondary_seq_id = $data['payload']['sequence_id'];
 
-      $sat_status = new SatStatus($data);
+      switch ($data['payload_type']) {
+        case Packet::P_CONFIG_CODE:
+          $secondary_column = Packet::P_CONFIG_COLUMN;
+          # code...
+          break;
+        case Packet::P_GPS_CODE:
+          $secondary_column = Packet::P_GPS_COLUMN;
+          # code...
+          break;
+        case Packet::P_HEALTH_CODE:
+          $secondary_column = Packet::P_HEALTH_COLUMN;
+          # code...
+          break;
+        case Packet::P_IMG_CODE:
+          $secondary_column = Packet::P_IMG_COLUMN;
+          # code...
+          break;
+        case Packet::P_IMU_CODE:
+          $secondary_column = Packet::P_IMU_COLUMN;
+          # code...
+          break;
+        default:
+          # code...
+          break;
+      };
+
+      $packet = Packet::where('status_sequence_id',$status_seq_id)
+        ->where('payload_type',$data['payload_type'])
+        ->where($secondary_column,$secondary_seq_id)->first();
+
+      if (!$packet) {
+          Log::info('NO PACKET!');
+          $packet = new Packet([
+            'status_sequence_id'=>$status_seq_id,
+            $secondary_column=>$secondary_seq_id,
+            'last_submitted'=> Carbon::now()->toDateTimeString(),
+            'checksum'=>$data['checksum'],
+            'hash'=>$data['hash'],
+            'payload_type'=>$data['payload_type'],
+          ]);
+          $packet->save();
+      } else {
+          Log::info('Found packet, id: '.$packet->id);
+          $packet->last_submitted = Carbon::now()->toDateTimeString();
+          $packet->save();
+      };
+
+      //save status data
+      //save secondary data
+      //add ids to packet
+
+
+
+
+      /*
+      $sat_status = new SatStatus($data['status']);
       $sat_status->save();
+      */
 
       return "Fake success.";
 
