@@ -18,8 +18,8 @@ class SubmissionBinary extends Model
      * @var array
      */
 
-  protected $guarded = [
-    'timestamp',
+  protected $fillable = [
+    'submission_id','data'
   ];
 
 	public $timestamps = false; //needed because I'm not using the default timestamp columns (updated_at, created_at), and otherwise php artisan tinker craps itself.

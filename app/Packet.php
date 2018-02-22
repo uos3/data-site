@@ -26,6 +26,13 @@ class Packet extends Model
 
 	public static $validation_rules = [];
 
+	const PAYLOAD_CONFIG = 'a';
+	const PAYLOAD_GPS = 'b';
+	const PAYLOAD_HEALTH = 'c';
+	const PAYLOAD_IMG = 'd';
+	const PAYLOAD_IMU = 'e';
+	const PAYLOAD_STATUS = 'f';
+
 
 	public function submission()
 	{

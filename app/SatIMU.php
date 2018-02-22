@@ -13,8 +13,18 @@ class SatIMU extends Model
      * @var array
      */
 
-  protected $guarded = [
-    'timestamp',
+  protected $fillable = [
+'submission_id',
+'timestamp',
+'mag_x',
+'mag_y',
+'mag_z',
+'gyro_x',
+'gyro_y',
+'gyro_z',
+'accel_x',
+'accel_y',
+'accel_z',
   ];
 
 	public $timestamps = false; //needed because I'm not using the default timestamp columns (updated_at, created_at), and otherwise php artisan tinker craps itself.
