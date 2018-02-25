@@ -192,23 +192,33 @@ class DataController extends Controller
 
       switch ($data['payload_type']) {
         case Packet::P_CONFIG_CODE:
-          $secondary_column = Packet::P_CONFIG_COLUMN;
+          $secondary_seq_column = Packet::P_CONFIG_SEQ_COLUMN;
+          $secondary_table_column = Packet::P_CONFIG_TBL_COLUMN;
+          $sat_secondary = new SatConfig();
           # code...
           break;
         case Packet::P_GPS_CODE:
-          $secondary_column = Packet::P_GPS_COLUMN;
+          $secondary_seq_column = Packet::P_GPS_SEQ_COLUMN;
+          $secondary_table_column = Packet::P_GPS_TBL_COLUMN;
+          $sat_secondary = new SatGPS();
           # code...
           break;
         case Packet::P_HEALTH_CODE:
-          $secondary_column = Packet::P_HEALTH_COLUMN;
+          $secondary_seq_column = Packet::P_HEALTH_SEQ_COLUMN;
+          $secondary_table_column = Packet::P_HEALTH_TBL_COLUMN;
+          $sat_secondary = new SatHealth();
           # code...
           break;
         case Packet::P_IMG_CODE:
-          $secondary_column = Packet::P_IMG_COLUMN;
+          $secondary_seq_column = Packet::P_IMG_SEQ_COLUMN;
+          $secondary_table_column = Packet::P_IMG_TBL_COLUMN;
+          $sat_secondary = new SatIMG();
           # code...
           break;
         case Packet::P_IMU_CODE:
-          $secondary_column = Packet::P_IMU_COLUMN;
+          $secondary_seq_column = Packet::P_IMU_SEQ_COLUMN;
+          $secondary_table_column = Packet::P_IMU_TBL_COLUMN;
+          $sat_secondary = new SatIMU();
           # code...
           break;
         default:
@@ -216,61 +226,64 @@ class DataController extends Controller
           break;
       };
 
+      error_log("payload type: ".$data['payload_type']);
+      error_log("status sequence id: ".$status_seq_id);
+      error_log("secondary column: ".$secondary_seq_column);
+      error_log("secondary column id: ".$secondary_seq_id);
+      //should this use FirstOrUpdate instead?
       $packet = Packet::where('status_sequence_id',$status_seq_id)
         ->where('payload_type',$data['payload_type'])
-        ->where($secondary_column,$secondary_seq_id)->first();
+        ->where($secondary_seq_column,$secondary_seq_id)->first();
 
       if (!$packet) {
+        //create new packet
           Log::info('NO PACKET!');
           $packet = new Packet([
             'status_sequence_id'=>$status_seq_id,
-            $secondary_column=>$secondary_seq_id,
+            $secondary_seq_column=>$secondary_seq_id,
             'last_submitted'=> Carbon::now()->toDateTimeString(),
             'checksum'=>$data['checksum'],
             'hash'=>$data['hash'],
             'payload_type'=>$data['payload_type'],
           ]);
           $packet->save();
+
+          //add packet_id to status data
+          $status_data = $data['status'];
+          $status_data['packet_id'] = $packet->id;
+
+          //save status data
+          $sat_status = new SatStatus($status_data);
+          $sat_status->save();
+
+          //add packet_id to secondary data
+          $secondary_data = $data['payload'];
+          $secondary_data['packet_id'] = $packet->id;
+
+          //save secondary data
+          $sat_secondary->update($secondary_data);
+
+          //add table ids to packet
+          $packet->status_table_id = $sat_status->id;
+          $packet->$secondary_table_column = $sat_secondary->id;
+          $packet->save();
+
       } else {
           Log::info('Found packet, id: '.$packet->id);
+          //packet already in the db, only update timestamp
           $packet->last_submitted = Carbon::now()->toDateTimeString();
           $packet->save();
       };
 
-      //save status data
-      //save secondary data
-      //add ids to packet
-
-
-
-
-      /*
-      $sat_status = new SatStatus($data['status']);
-      $sat_status->save();
-      */
-
-      return "Fake success.";
-
-
-      //save status
-
-      //get packet type
-
-      //save secondary table
 
       //if submission is okay, increase user's upload count
-
       if (isset($data['user_id'])) {
 				$user->upload_count = $user->upload_count + 1;
 				$user->save();
 			};
 
       return "Success.";
-
-
-    //Log::info("TEST");
-
-
+      //Log::info("TEST");
 
     }
 
