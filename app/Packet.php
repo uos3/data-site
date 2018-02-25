@@ -34,6 +34,7 @@ class Packet extends Model
 		'last_submitted',
 		'checksum',
 		'hash',
+		'payload_type'
   ];
 
 	public $timestamps = false; //needed because I'm not using the default timestamp columns (updated_at, created_at), and otherwise php artisan tinker craps itself.
@@ -41,15 +42,20 @@ class Packet extends Model
 	public static $validation_rules = [];
 
 	const P_CONFIG_CODE = 'a';
-	const P_CONFIG_COLUMN = 'config_sequence_id';
+	const P_CONFIG_SEQ_COLUMN = 'config_sequence_id';
+	const P_CONFIG_TBL_COLUMN = 'config_table_id';
 	const P_GPS_CODE = 'b';
-	const P_GPS_COLUMN = 'gps_sequence_id';
+	const P_GPS_SEQ_COLUMN = 'gps_sequence_id';
+	const P_GPS_TBL_COLUMN = 'gps_table_id';
 	const P_HEALTH_CODE = 'c';
-	const P_HEALTH_COLUMN = 'health_sequence_id';
+	const P_HEALTH_SEQ_COLUMN = 'health_sequence_id';
+	const P_HEALTH_TBL_COLUMN = 'health_table_id';
 	const P_IMG_CODE = 'd';
-	const P_IMG_COLUMN = 'img_sequence_id';
+	const P_IMG_SEQ_COLUMN = 'img_sequence_id';
+	const P_IMG_TBL_COLUMN = 'img_table_id';
 	const P_IMU_CODE = 'e';
-	const P_IMU_COLUMN = 'imu_sequence_id';
+	const P_IMU_SEQ_COLUMN = 'imu_sequence_id';
+	const P_IMU_TBL_COLUMN = 'imu_table_id';
 
 	public function submission()
 	{
