@@ -105,7 +105,7 @@ class DataController extends Controller
       $data = [
         'payload_type'=>'a',
         'status'=> [
-            'sequence_id'=>4,
+            'sequence_id'=>2,
             'spacecraft_id'=>'x',
             'spacecraft_time'=>'2018-02-18 21:00:00',
             'time_source'=>'x',
@@ -226,18 +226,30 @@ class DataController extends Controller
           break;
       };
 
-      error_log("payload type: ".$data['payload_type']);
-      error_log("status sequence id: ".$status_seq_id);
-      error_log("secondary column: ".$secondary_seq_column);
-      error_log("secondary column id: ".$secondary_seq_id);
+      $last_valid = Carbon::now()->subHours(12)->toDateTimeString();
+      $packet = Packet::whereDate('last_submitted','<',$last_valid)
+        ->where('status_sequence_id',$status_seq_id)
+        ->where('payload_type',$data['payload_type'])
+
+        ->where($secondary_seq_column,$secondary_seq_id)
+        ->where('checksum',$data['checksum'])
+        ->orderBy('last_submitted', 'desc')
+        ->first();
+
+      //error_log("payload type: ".$data['payload_type']);
+      //error_log("status sequence id: ".$status_seq_id);
+      //error_log("secondary column: ".$secondary_seq_column);
+      //error_log("secondary column id: ".$secondary_seq_id);
       //should this use FirstOrUpdate instead?
+      /*
       $packet = Packet::where('status_sequence_id',$status_seq_id)
         ->where('payload_type',$data['payload_type'])
-        ->where($secondary_seq_column,$secondary_seq_id)->first();
-
+        ->where($secondary_seq_column,$secondary_seq_id)->orderBy('last_submitted', 'desc')->first();
+        */
+      $result_message;
       if (!$packet) {
         //create new packet
-          Log::info('NO PACKET!');
+          //Log::info('NO PACKET!');
           $packet = new Packet([
             'status_sequence_id'=>$status_seq_id,
             $secondary_seq_column=>$secondary_seq_id,
@@ -268,11 +280,14 @@ class DataController extends Controller
           $packet->$secondary_table_column = $sat_secondary->id;
           $packet->save();
 
+          $result_message = "New packet created. ID: ".$packet->id;
+
       } else {
-          Log::info('Found packet, id: '.$packet->id);
+          //Log::info('Found packet, id: '.$packet->id);
           //packet already in the db, only update timestamp
           $packet->last_submitted = Carbon::now()->toDateTimeString();
           $packet->save();
+          $result_message = "Packet already exists. ID: ".$packet->id;
       };
 
 
@@ -280,9 +295,10 @@ class DataController extends Controller
       if (isset($data['user_id'])) {
 				$user->upload_count = $user->upload_count + 1;
 				$user->save();
+        $result_message .= " Updated user upload count.";
 			};
 
-      return "Success.";
+      return "Success. ".$result_message;
       //Log::info("TEST");
 
     }
