@@ -170,23 +170,15 @@ class DataController extends Controller
 
       $downlink_time = $request->input('downlink_time'); //this isn't in the binary
       $data_encoded = $request->input("data");
+
+      if ($data_encoded == '') {
+        return response("No data submitted.",400);
+      }
+
       $data = $this->parseBinary($data_encoded);
 
       if (!$data) {
-        $submission = new Submission([
-          'server_time'=> Carbon::now()->toDateTimeString(),
-          'user_id'=> $user_id,
-          'ip_address'=>$ip,
-          'packet_id'=>null,
-          'checksum_success'=>false,
-        ]);
-        $submission->save();
-
-        $binary = new SubmissionBinary([
-          'data'=> $data_encoded,
-          'submission_id'=>$submission->id,
-        ]);
-        $binary->save();
+        Submission::saveFailed($user_id,$ip,$downlink_time,$data_encoded);
 
         return response('Upload failed, checksum incorrect.',400);
       }
@@ -284,6 +276,8 @@ class DataController extends Controller
           $packet->$secondary_table_column = $sat_secondary->id;
           $packet->save();
 
+          Submission::saveSuccessful($user_id,$ip,$packet->id,$downlink_time,$data_encoded);
+
           $result_message = "New packet created. ID: ".$packet->id;
 
       } else {
@@ -291,6 +285,7 @@ class DataController extends Controller
           //packet already in the db, only update timestamp
           $packet->last_submitted = Carbon::now()->toDateTimeString();
           $packet->save();
+          Submission::saveSuccessful($user_id,$ip,$packet->id,$downlink_time,$data_encoded);
           $result_message = "Packet already exists. ID: ".$packet->id;
       };
 

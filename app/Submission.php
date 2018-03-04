@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Submission extends Model
 {
@@ -18,6 +19,7 @@ class Submission extends Model
 		'user_id',
 		'ip_address',
 		'sequence_id',
+		'checksum_success'
 	];
 
 	public $timestamps = false; //needed because I'm not using the default timestamp columns (updated_at, created_at), and otherwise php artisan tinker craps itself.
@@ -35,5 +37,45 @@ class Submission extends Model
 	public function packet()
 	{
 		return $this->belongsTo('App\Packet');
+	}
+
+
+	public static function saveFailed($user_id, $ip, $packet_id = null,$downlink_time,$data_encoded) {
+
+    $submission = new Submission([
+      'server_time'=> Carbon::now()->toDateTimeString(),
+      'user_id'=> $user_id,
+      'ip_address'=>$ip,
+      'packet_id'=>null,
+      'checksum_success'=>false,
+      'downlink_time'=>$downlink_time,
+    ]);
+    $submission->save();
+
+    $binary = new SubmissionBinary([
+      'data'=> $data_encoded,
+      'submission_id'=>$submission->id,
+    ]);
+    $binary->save();
+	}
+
+
+	public static function saveSuccessful($user_id,$ip,$packet_id,$downlink_time,$data_encoded) {
+
+		$submission = new Submission([
+			'server_time'=> Carbon::now()->toDateTimeString(),
+			'user_id'=> $user_id,
+			'ip_address'=>$ip,
+			'packet_id'=>$packet_id,
+			'checksum_success'=>true,
+			'downlink_time'=>$downlink_time,
+		]);
+		$submission->save();
+
+		$binary = new SubmissionBinary([
+			'data'=> $data_encoded,
+			'submission_id'=>$submission->id,
+		]);
+		$binary->save();
 	}
 }
