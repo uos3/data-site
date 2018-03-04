@@ -140,8 +140,12 @@ class DataController extends Controller
     public function submit(Request $request) {
 
       $app_key = $request->input('app_key');
-      if (!$this->validateAppKey($app_key)) {
+      if ($app_key =='') {
         return response("No app key supplied.",401);
+      }
+
+      if (!$this->validateAppKey($app_key)) {
+        return response("App key incorrect.",403);
       }
 
       $ip = $request->ip();
