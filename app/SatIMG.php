@@ -15,7 +15,7 @@ class SatIMG extends Model
      */
 
   protected $fillable = [
-'submission_id',
+'sequence_id',
 'timestamp',
 'image_id',
 'fragment_id',
