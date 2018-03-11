@@ -41,21 +41,21 @@ class Packet extends Model
 
 	public static $validation_rules = [];
 
-	const P_CONFIG_CODE = 'a';
-	const P_CONFIG_SEQ_COLUMN = 'config_sequence_id';
-	const P_CONFIG_TBL_COLUMN = 'config_table_id';
-	const P_GPS_CODE = 'b';
-	const P_GPS_SEQ_COLUMN = 'gps_sequence_id';
-	const P_GPS_TBL_COLUMN = 'gps_table_id';
-	const P_HEALTH_CODE = 'c';
-	const P_HEALTH_SEQ_COLUMN = 'health_sequence_id';
-	const P_HEALTH_TBL_COLUMN = 'health_table_id';
-	const P_IMG_CODE = 'd';
-	const P_IMG_SEQ_COLUMN = 'img_sequence_id';
-	const P_IMG_TBL_COLUMN = 'img_table_id';
-	const P_IMU_CODE = 'e';
-	const P_IMU_SEQ_COLUMN = 'imu_sequence_id';
-	const P_IMU_TBL_COLUMN = 'imu_table_id';
+	const CONFIG_CODE = 'a';
+	const CONFIG_SEQ_COLUMN = 'config_sequence_id';
+	const CONFIG_TBL_COLUMN = 'config_table_id';
+	const GPS_CODE = 'b';
+	const GPS_SEQ_COLUMN = 'gps_sequence_id';
+	const GPS_TBL_COLUMN = 'gps_table_id';
+	const HEALTH_CODE = 'c';
+	const HEALTH_SEQ_COLUMN = 'health_sequence_id';
+	const HEALTH_TBL_COLUMN = 'health_table_id';
+	const IMG_CODE = 'd';
+	const IMG_SEQ_COLUMN = 'img_sequence_id';
+	const IMG_TBL_COLUMN = 'img_table_id';
+	const IMU_CODE = 'e';
+	const IMU_SEQ_COLUMN = 'imu_sequence_id';
+	const IMU_TBL_COLUMN = 'imu_table_id';
 
 	public function submission()
 	{

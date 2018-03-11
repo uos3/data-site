@@ -7,6 +7,7 @@ use App\Http\Requests;
 use Carbon\Carbon;
 use Validator;
 use Log;
+use Exception;
 
 /*my Eloquent models*/
 use App\Submission;
@@ -94,13 +95,15 @@ class DataController extends Controller
     /**
     * STUB. Convert binary data to php array/object.
     *
-    * @param string $data_encoded Base64-encoded binary data from the SDR plugin.
+    * @param string $data_encoded  Base64-encoded binary data from the SDR plugin.
     * @return Array $data Array of decoded values.
     *
     */
     private function parseBinary($data_encoded) {
-      //feed the hash to the C++ parser
-      //
+      if (is_string($data_encoded)===false || base64_decode($str, true) === false)
+      {
+          throw new Exception("Not a base64 string.", 1);
+      }
 
       $data = [
         'payload_type'=>'a',
@@ -169,16 +172,27 @@ class DataController extends Controller
       }
 
       $downlink_time = $request->input('downlink_time'); //this isn't in the binary
-      $data_encoded = $request->input("data");
 
-      if ($data_encoded == '') {
+      if ($request->input('data') == '') {
         return response("No data submitted.",400);
       }
 
-      $data = $this->parseBinary($data_encoded);
+      $plain = (bool) $request->input('plain',FALSE);
+
+      if ($plain) {
+        try {
+            $data = $this->parseBinary($request->input('data'));
+        } catch (Exception $e) {
+            return response($e->getMessage(),500);
+        }
+        $data_input = $request->input('data');
+      } else {
+        $data = $request->input('data');
+        $data_input = json_encode($request->input('data'));
+      };
 
       if (!$data) {
-        Submission::saveFailed($user_id,$ip,$downlink_time,$data_encoded);
+        Submission::saveFailed($user_id,$ip,$downlink_time,$data_input);
 
         return response('Upload failed, checksum incorrect.',400);
       }
@@ -187,33 +201,33 @@ class DataController extends Controller
       $secondary_seq_id = $data['payload']['sequence_id'];
 
       switch ($data['payload_type']) {
-        case Packet::P_CONFIG_CODE:
-          $secondary_seq_column = Packet::P_CONFIG_SEQ_COLUMN;
-          $secondary_table_column = Packet::P_CONFIG_TBL_COLUMN;
+        case Packet::CONFIG_CODE:
+          $secondary_seq_column = Packet::CONFIG_SEQ_COLUMN;
+          $secondary_table_column = Packet::CONFIG_TBL_COLUMN;
           $sat_secondary = new SatConfig();
           # code...
           break;
-        case Packet::P_GPS_CODE:
-          $secondary_seq_column = Packet::P_GPS_SEQ_COLUMN;
-          $secondary_table_column = Packet::P_GPS_TBL_COLUMN;
+        case Packet::GPS_CODE:
+          $secondary_seq_column = Packet::GPS_SEQ_COLUMN;
+          $secondary_table_column = Packet::GPS_TBL_COLUMN;
           $sat_secondary = new SatGPS();
           # code...
           break;
-        case Packet::P_HEALTH_CODE:
-          $secondary_seq_column = Packet::P_HEALTH_SEQ_COLUMN;
-          $secondary_table_column = Packet::P_HEALTH_TBL_COLUMN;
+        case Packet::HEALTH_CODE:
+          $secondary_seq_column = Packet::HEALTH_SEQ_COLUMN;
+          $secondary_table_column = Packet::HEALTH_TBL_COLUMN;
           $sat_secondary = new SatHealth();
           # code...
           break;
-        case Packet::P_IMG_CODE:
-          $secondary_seq_column = Packet::P_IMG_SEQ_COLUMN;
-          $secondary_table_column = Packet::P_IMG_TBL_COLUMN;
+        case Packet::IMG_CODE:
+          $secondary_seq_column = Packet::IMG_SEQ_COLUMN;
+          $secondary_table_column = Packet::IMG_TBL_COLUMN;
           $sat_secondary = new SatIMG();
           # code...
           break;
-        case Packet::P_IMU_CODE:
-          $secondary_seq_column = Packet::P_IMU_SEQ_COLUMN;
-          $secondary_table_column = Packet::P_IMU_TBL_COLUMN;
+        case Packet::IMU_CODE:
+          $secondary_seq_column = Packet::IMU_SEQ_COLUMN;
+          $secondary_table_column = Packet::IMU_TBL_COLUMN;
           $sat_secondary = new SatIMU();
           # code...
           break;
@@ -276,7 +290,7 @@ class DataController extends Controller
           $packet->$secondary_table_column = $sat_secondary->id;
           $packet->save();
 
-          Submission::saveSuccessful($user_id,$ip,$packet->id,$downlink_time,$data_encoded);
+          Submission::saveSuccessful($user_id,$ip,$packet->id,$downlink_time,$data_input);
 
           $result_message = "New packet created. ID: ".$packet->id;
 
@@ -285,7 +299,7 @@ class DataController extends Controller
           //packet already in the db, only update timestamp
           $packet->last_submitted = Carbon::now()->toDateTimeString();
           $packet->save();
-          Submission::saveSuccessful($user_id,$ip,$packet->id,$downlink_time,$data_encoded);
+          Submission::saveSuccessful($user_id,$ip,$packet->id,$downlink_time,$data_input );
           $result_message = "Packet already exists. ID: ".$packet->id;
       };
 
