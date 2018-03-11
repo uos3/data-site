@@ -197,98 +197,36 @@ class DataController extends Controller
         return response('Upload failed, checksum incorrect.',400);
       }
 
+      if (!array_key_exists($data['payload_type'],Packet::$payloads)) {
+        return response("Invalid payload type.",400);
+      }
+
       $status_seq_id = $data['status']['sequence_id'];
-      $secondary_seq_id = $data['payload']['sequence_id'];
+      $payload_seq_id = $data['payload']['sequence_id'];
+      $packet = Packet::find($data['payload_type'],$status_seq_id,$payload_seq_id,$data['checksum']);
 
-      switch ($data['payload_type']) {
-        case Packet::CONFIG_CODE:
-          $secondary_seq_column = Packet::CONFIG_SEQ_COLUMN;
-          $secondary_table_column = Packet::CONFIG_TBL_COLUMN;
-          $sat_secondary = new SatConfig();
-          # code...
-          break;
-        case Packet::GPS_CODE:
-          $secondary_seq_column = Packet::GPS_SEQ_COLUMN;
-          $secondary_table_column = Packet::GPS_TBL_COLUMN;
-          $sat_secondary = new SatGPS();
-          # code...
-          break;
-        case Packet::HEALTH_CODE:
-          $secondary_seq_column = Packet::HEALTH_SEQ_COLUMN;
-          $secondary_table_column = Packet::HEALTH_TBL_COLUMN;
-          $sat_secondary = new SatHealth();
-          # code...
-          break;
-        case Packet::IMG_CODE:
-          $secondary_seq_column = Packet::IMG_SEQ_COLUMN;
-          $secondary_table_column = Packet::IMG_TBL_COLUMN;
-          $sat_secondary = new SatIMG();
-          # code...
-          break;
-        case Packet::IMU_CODE:
-          $secondary_seq_column = Packet::IMU_SEQ_COLUMN;
-          $secondary_table_column = Packet::IMU_TBL_COLUMN;
-          $sat_secondary = new SatIMU();
-          # code...
-          break;
-        default:
-          # code...
-          break;
-      };
-
-      $last_valid = Carbon::now()->subHours(12)->toDateTimeString();
-      $packet = Packet::whereDate('last_submitted','<',$last_valid)
-        ->where('status_sequence_id',$status_seq_id)
-        ->where('payload_type',$data['payload_type'])
-
-        ->where($secondary_seq_column,$secondary_seq_id)
-        ->where('checksum',$data['checksum'])
-        ->orderBy('last_submitted', 'desc')
-        ->first();
-
-      //error_log("payload type: ".$data['payload_type']);
-      //error_log("status sequence id: ".$status_seq_id);
-      //error_log("secondary column: ".$secondary_seq_column);
-      //error_log("secondary column id: ".$secondary_seq_id);
-      //should this use FirstOrUpdate instead?
-      /*
-      $packet = Packet::where('status_sequence_id',$status_seq_id)
-        ->where('payload_type',$data['payload_type'])
-        ->where($secondary_seq_column,$secondary_seq_id)->orderBy('last_submitted', 'desc')->first();
-        */
       $result_message;
       if (!$packet) {
         //create new packet
           //Log::info('NO PACKET!');
-          $packet = new Packet([
+          $packet = Packet::create([
             'status_sequence_id'=>$status_seq_id,
-            $secondary_seq_column=>$secondary_seq_id,
             'last_submitted'=> Carbon::now()->toDateTimeString(),
             'checksum'=>$data['checksum'],
             'hash'=>$data['hash'],
             'payload_type'=>$data['payload_type'],
           ]);
-          $packet->save();
 
           //add packet_id to status data
           $status_data = $data['status'];
           $status_data['packet_id'] = $packet->id;
 
           //save status data
-          $sat_status = new SatStatus($status_data);
-          $sat_status->save();
-
-          //add packet_id to secondary data
-          $secondary_data = $data['payload'];
-          $secondary_data['packet_id'] = $packet->id;
-
-          //save secondary data
-          $sat_secondary->update($secondary_data);
-
-          //add table ids to packet
+          $sat_status = SatStatus::create($status_data);
           $packet->status_table_id = $sat_status->id;
-          $packet->$secondary_table_column = $sat_secondary->id;
           $packet->save();
+
+          $packet->savePayload($data['payload']);
 
           Submission::saveSuccessful($user_id,$ip,$packet->id,$downlink_time,$data_input);
 
