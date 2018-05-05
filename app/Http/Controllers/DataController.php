@@ -269,7 +269,7 @@ class DataController extends Controller
    */
   public function lastPacket(Request $request) {
     $type = $request->get('type',false);
-    $format = $request->get('format');
+    $format = $request->get('format','json');
     //char
     $packet = Packet::last($type);
     if (!$packet) {
@@ -291,7 +291,7 @@ class DataController extends Controller
     //get the last packet of each type
     //combine them into one JSON
     $dataset = new Dataset;
-    $format = $request->get('format');
+    $format = $request->get('format','json');
     //option to export only the data (i.e. for collecting snapshots over time)
 
     if ($format == 'JSON' || $format == "json" || $format == "Json") {
