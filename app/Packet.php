@@ -1,10 +1,5 @@
 <?php
 
-/*
-
-TODO MIGRATION!
-*/
-
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
@@ -181,7 +176,7 @@ class Packet extends Model
 
 		return $packet;
 	}
-
+	
 	public function output($format) {
 		if ($format == 'json') {
 			return $this->toJson();

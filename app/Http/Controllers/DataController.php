@@ -20,6 +20,7 @@ use App\SatIMG;
 use App\SatStatus;
 use App\BlacklistedIP;
 use App\Packet;
+use App\Dataset;
 
 class DataController extends Controller
 {
@@ -290,37 +291,29 @@ class DataController extends Controller
     //if JSON:
     //get the last packet of each type
     //combine them into one JSON
-    $packet_set = [];
-    foreach (Packet::$payloads as $p_key=>$p_info) {
-      $packet_set[$p_key] = Packet::last($p_key);
-    }
-
+    $dataset = new Dataset;
     $format = $request->get('format');
-    $output = [];
+    $no_headers = $request->get('no-headers',false);
+    //option to export only the data (i.e. for collecting snapshots over time)
 
     if ($format == 'JSON' || $format == "json" || $format == "Json") {
-      foreach (Packet::$payloads as $p_key=>$p_info) {
-        $payload_type_name = $p_info['name'];
-        $packet = $packet_set[$p_key];
-        if (!$packet) {
-          $output[$payload_type_name] = [];
-          //set empty
-        } else {
-          $payload = $packet->$payload_type_name;
-          if ($payload == null) {
-            return response("Payload content is missing! Please report this to XXX.",500);
-          } else {
-            $output[$payload_type_name] = $packet->$payload_type_name->toArray();
-          }
-        }
+      try {
+        $output = $dataset->toArray();
+        return $output;
+      } catch (Exception $e) {
+        return response($e->getMessage(),500);
       }
     } else if ($format == 'CSV' || $format == "csv" || $format == "Csv") {
-      return response("No csv format yet.",500);
+      $output = $dataset->toFlatArray();
+      $output_string = '';
+      if (!$no_headers) {
+        $output_string.= implode(array_keys($output),",")."\n";
+      }
+      $output_string .= implode($output,",");
+      return $output_string;
+      //provisional - if the content should contain commas/quotes, this would be Very Bad
     } else {
       return response("Output format not implemented.",500);
     }
-
-    return $output;
   }
-
 }
