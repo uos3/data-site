@@ -176,13 +176,35 @@ class Packet extends Model
 
 		return $packet;
 	}
-	
+
 	public function output($format) {
-		if ($format == 'json') {
+		if ($format == 'JSON' || $format == "json" || $format == "Json") {
 			return $this->toJson();
-    } else {
+    } else if($format == 'CSV' || $format == "csv" || $format == "Csv") {
+			return $this->toCsv();
+		}
+		 else {
 			throw new Exception("Output format not implemented.");
     }
+	}
+
+	public function toCsv() {
+		$output_array = $this->toArray();
+		$payload_type_name = Packet::$payloads[$this->payload_type]['name'];
+		$sat_status = $output_array['sat_status'];
+		unset($output_array['sat_status']);
+		foreach($sat_status as $key=>$value) {
+			$output_array["sat_status.".$key]=$value;
+		}
+		$payload = $output_array[$payload_type_name];
+		unset($output_array[$payload_type_name]);
+		foreach($payload as $key=>$value) {
+			$output_array[$payload_type_name.".".$key]=$value;
+		}
+		$output_string = "";
+		$output_string.= implode(array_keys($output_array),",")."\n";
+		$output_string .= implode($output_array,",");
+		return $output_string;
 	}
 
 }

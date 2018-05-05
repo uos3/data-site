@@ -269,18 +269,17 @@ class DataController extends Controller
    */
   public function lastPacket(Request $request) {
     $type = $request->get('type',false);
+    $format = $request->get('format');
     //char
     $packet = Packet::last($type);
     if (!$packet) {
       return response("No packet of this type found.",404);
     }
 
-    $format = $request->get('format');
-
     try {
       $output = $packet->output($format);
     } catch (Exception $e) {
-      return response($exception->getMessage(),500);
+      return response($e->getMessage(),500);
     }
     return $output;
   }
@@ -293,7 +292,6 @@ class DataController extends Controller
     //combine them into one JSON
     $dataset = new Dataset;
     $format = $request->get('format');
-    $no_headers = $request->get('no-headers',false);
     //option to export only the data (i.e. for collecting snapshots over time)
 
     if ($format == 'JSON' || $format == "json" || $format == "Json") {
@@ -306,9 +304,7 @@ class DataController extends Controller
     } else if ($format == 'CSV' || $format == "csv" || $format == "Csv") {
       $output = $dataset->toFlatArray();
       $output_string = '';
-      if (!$no_headers) {
-        $output_string.= implode(array_keys($output),",")."\n";
-      }
+      $output_string.= implode(array_keys($output),",")."\n";
       $output_string .= implode($output,",");
       return $output_string;
       //provisional - if the content should contain commas/quotes, this would be Very Bad
