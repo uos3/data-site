@@ -141,4 +141,32 @@ class Packet extends Model
 
 		return $packet;
 	}
+/**
+ * Get last submitted packet.
+ * @param String $type Get packet with payload of a certain type.
+ * @return Packet|null The last packet, or null if no packets.
+ */
+	public static function last($type) {
+		if (!$type) {
+			$packet =  Packet::with('sat_config','sat_status','sat_health','sat_gps','sat_imu','sat_img')
+			->orderBy('last_submitted', 'desc')
+			->first();
+		} else {
+			$packet =  Packet::with('sat_config','sat_status','sat_health','sat_gps','sat_imu','sat_img')
+			->where('payload_type',$type)
+			->orderBy('last_submitted', 'desc')
+			->first();
+		}
+
+		return $packet;
+	}
+
+	public function output($format) {
+		if ($format == 'json') {
+			return $this->toJson();
+    } else {
+			throw new Exception("Output format not implemented.");
+    }
+	}
+
 }

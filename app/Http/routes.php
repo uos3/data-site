@@ -21,6 +21,8 @@ Route::get('submit',['as'=>'submit','uses'=>'PagesController@submit']);
 Route::post('data/submit','DataController@submit');
 Route::get('data/submit','DataController@redirect');
 
+Route::get('data/packet/last','DataController@lastPacket');
+
 Route::get('register/verify/{confirmationCode}', [
     'as' => 'confirmation_path',
     'uses' => 'Auth\RegistrationController@confirm'

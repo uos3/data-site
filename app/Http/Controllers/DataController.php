@@ -177,6 +177,7 @@ class DataController extends Controller
         return response("No data submitted.",400);
       }
 
+//the API can take either JSON or as base64-encoded binary file that needs to be decoded by the planned C++ script
       $plain = (bool) $request->input('plain',FALSE);
 
       if ($plain) {
@@ -260,4 +261,26 @@ class DataController extends Controller
 	public function redirect() {
 		return redirect()->route('submit');
 	}
+
+  /**
+   * Outputs last packet in a chosen format (more will be added).
+   * @param  Request $request
+   */
+  public function lastPacket(Request $request) {
+    $type = $request->get('type',false);
+    $packet = Packet::last($type);
+    if (!$packet) {
+      return response("No packet of this type found.",404);
+    }
+    
+    $format = $request->get('format');
+
+    try {
+      $output = $packet->output($format);
+    } catch (Exception $e) {
+      return response($exception->getMessage(),500);
+    }
+    return $output;
+  }
+
 }
