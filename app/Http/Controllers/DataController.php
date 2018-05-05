@@ -20,6 +20,7 @@ use App\SatIMG;
 use App\SatStatus;
 use App\BlacklistedIP;
 use App\Packet;
+use App\Dataset;
 
 class DataController extends Controller
 {
@@ -177,6 +178,7 @@ class DataController extends Controller
         return response("No data submitted.",400);
       }
 
+//the API can take either JSON or as base64-encoded binary file that needs to be decoded by the planned C++ script
       $plain = (bool) $request->input('plain',FALSE);
 
       if ($plain) {
@@ -260,4 +262,54 @@ class DataController extends Controller
 	public function redirect() {
 		return redirect()->route('submit');
 	}
+
+  /**
+   * Outputs last packet in a chosen format (more will be added).
+   * @param  Request $request
+   */
+  public function lastPacket(Request $request) {
+    $type = $request->get('type',false);
+    $format = $request->get('format','json');
+    //char
+    $packet = Packet::last($type);
+    if (!$packet) {
+      return response("No packet of this type found.",404);
+    }
+
+    try {
+      $output = $packet->output($format);
+    } catch (Exception $e) {
+      return response($e->getMessage(),500);
+    }
+    return $output;
+  }
+
+  public function exportLast(Request $request) {
+    //get requested format
+    //if format doesn't exist, throw error
+    //if JSON:
+    //get the last packet of each type
+    //combine them into one JSON
+    $dataset = new Dataset;
+    $format = $request->get('format','json');
+    //option to export only the data (i.e. for collecting snapshots over time)
+
+    if ($format == 'JSON' || $format == "json" || $format == "Json") {
+      try {
+        $output = $dataset->toArray();
+        return $output;
+      } catch (Exception $e) {
+        return response($e->getMessage(),500);
+      }
+    } else if ($format == 'CSV' || $format == "csv" || $format == "Csv") {
+      $output = $dataset->toFlatArray();
+      $output_string = '';
+      $output_string.= implode(array_keys($output),",")."\n";
+      $output_string .= implode($output,",");
+      return $output_string;
+      //provisional - if the content should contain commas/quotes, this would be Very Bad
+    } else {
+      return response("Output format not implemented.",500);
+    }
+  }
 }

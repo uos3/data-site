@@ -1,10 +1,5 @@
 <?php
 
-/*
-
-TODO MIGRATION!
-*/
-
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
@@ -44,6 +39,22 @@ class Packet extends Model
 		'payload_type'
   ];
 
+	protected $hidden = [
+		'status_table_id',
+		'status_sequence_id',
+		'health_table_id',
+		'health_sequence_id',
+		'imu_table_id',
+		'imu_sequence_id',
+		'img_table_id',
+		'img_sequence_id',
+		'gps_table_id',
+		'gps_sequence_id',
+		'config_table_id',
+		'config_sequence_id',
+	];
+
+
 	public $timestamps = false; //needed because I'm not using the default timestamp columns (updated_at, created_at), and otherwise php artisan tinker craps itself.
 
 	public static $validation_rules = [];
@@ -52,26 +63,31 @@ class Packet extends Model
 		'a'=>[
 			'seq_column'=>'config_sequence_id',
 			'tbl_column'=>'config_table_id',
+			'name'=>'sat_config',
 			'class'=>'SatConfig',
 		],
 		'b'=>[
 			'seq_column'=>'gps_sequence_id',
 			'tbl_column'=>'gps_table_id',
+			'name'=>'sat_gps',
 			'class'=>'SatGPS',
 		],
 		'c'=>[
 			'seq_column'=>'health_sequence_id',
 			'tbl_column'=>'health_table_id',
+			'name'=>'sat_health',
 			'class'=>'SatHealth',
 		],
 		'd'=>[
 			'seq_column'=>'img_sequence_id',
 			'tbl_column'=>'img_table_id',
+			'name'=>'sat_img',
 			'class'=>'SatIMG',
 		],
 		'e'=>[
 			'seq_column'=>'imu_sequence_id',
 			'tbl_column'=>'imu_table_id',
+			'name'=>'sat_imu',
 			'class'=>'SatIMU',
 		],
 	];
@@ -141,4 +157,54 @@ class Packet extends Model
 
 		return $packet;
 	}
+/**
+ * Get last submitted packet.
+ * @param String $type Get packet with payload of a certain type.
+ * @return Packet|null The last packet, or null if no packets.
+ */
+	public static function last($type) {
+		if (!$type) {
+			$packet =  Packet::with('sat_config','sat_status','sat_health','sat_gps','sat_imu','sat_img')
+			->orderBy('last_submitted', 'desc')
+			->first();
+		} else {
+			$packet =  Packet::with('sat_config','sat_status','sat_health','sat_gps','sat_imu','sat_img')
+			->where('payload_type',$type)
+			->orderBy('last_submitted', 'desc')
+			->first();
+		}
+
+		return $packet;
+	}
+
+	public function output($format) {
+		if ($format == 'JSON' || $format == "json" || $format == "Json") {
+			return $this->toJson();
+    } else if($format == 'CSV' || $format == "csv" || $format == "Csv") {
+			return $this->toCsv();
+		}
+		 else {
+			throw new Exception("Output format not implemented.");
+    }
+	}
+
+	public function toCsv() {
+		$output_array = $this->toArray();
+		$payload_type_name = Packet::$payloads[$this->payload_type]['name'];
+		$sat_status = $output_array['sat_status'];
+		unset($output_array['sat_status']);
+		foreach($sat_status as $key=>$value) {
+			$output_array["sat_status.".$key]=$value;
+		}
+		$payload = $output_array[$payload_type_name];
+		unset($output_array[$payload_type_name]);
+		foreach($payload as $key=>$value) {
+			$output_array[$payload_type_name.".".$key]=$value;
+		}
+		$output_string = "";
+		$output_string.= implode(array_keys($output_array),",")."\n";
+		$output_string .= implode($output_array,",");
+		return $output_string;
+	}
+
 }
