@@ -23,6 +23,8 @@ Route::get('data/submit','DataController@redirect');
 
 Route::get('data/packet/last','DataController@lastPacket');
 
+Route::get('data/export/last','DataController@exportLast');
+
 Route::get('register/verify/{confirmationCode}', [
     'as' => 'confirmation_path',
     'uses' => 'Auth\RegistrationController@confirm'

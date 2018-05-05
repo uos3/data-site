@@ -268,11 +268,12 @@ class DataController extends Controller
    */
   public function lastPacket(Request $request) {
     $type = $request->get('type',false);
+    //char
     $packet = Packet::last($type);
     if (!$packet) {
       return response("No packet of this type found.",404);
     }
-    
+
     $format = $request->get('format');
 
     try {
@@ -280,6 +281,45 @@ class DataController extends Controller
     } catch (Exception $e) {
       return response($exception->getMessage(),500);
     }
+    return $output;
+  }
+
+  public function exportLast(Request $request) {
+    //get requested format
+    //if format doesn't exist, throw error
+    //if JSON:
+    //get the last packet of each type
+    //combine them into one JSON
+    $packet_set = [];
+    foreach (Packet::$payloads as $p_key=>$p_info) {
+      $packet_set[$p_key] = Packet::last($p_key);
+    }
+
+    $format = $request->get('format');
+    $output = [];
+
+    if ($format == 'JSON' || $format == "json" || $format == "Json") {
+      foreach (Packet::$payloads as $p_key=>$p_info) {
+        $payload_type_name = $p_info['name'];
+        $packet = $packet_set[$p_key];
+        if (!$packet) {
+          $output[$payload_type_name] = [];
+          //set empty
+        } else {
+          $payload = $packet->$payload_type_name;
+          if ($payload == null) {
+            return response("Payload content is missing! Please report this to XXX.",500);
+          } else {
+            $output[$payload_type_name] = $packet->$payload_type_name->toArray();
+          }
+        }
+      }
+    } else if ($format == 'CSV' || $format == "csv" || $format == "Csv") {
+      return response("No csv format yet.",500);
+    } else {
+      return response("Output format not implemented.",500);
+    }
+
     return $output;
   }
 

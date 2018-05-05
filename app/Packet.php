@@ -44,6 +44,22 @@ class Packet extends Model
 		'payload_type'
   ];
 
+	protected $hidden = [
+		'status_table_id',
+		'status_sequence_id',
+		'health_table_id',
+		'health_sequence_id',
+		'imu_table_id',
+		'imu_sequence_id',
+		'img_table_id',
+		'img_sequence_id',
+		'gps_table_id',
+		'gps_sequence_id',
+		'config_table_id',
+		'config_sequence_id',
+	];
+
+
 	public $timestamps = false; //needed because I'm not using the default timestamp columns (updated_at, created_at), and otherwise php artisan tinker craps itself.
 
 	public static $validation_rules = [];
@@ -52,26 +68,31 @@ class Packet extends Model
 		'a'=>[
 			'seq_column'=>'config_sequence_id',
 			'tbl_column'=>'config_table_id',
+			'name'=>'sat_config',
 			'class'=>'SatConfig',
 		],
 		'b'=>[
 			'seq_column'=>'gps_sequence_id',
 			'tbl_column'=>'gps_table_id',
+			'name'=>'sat_gps',
 			'class'=>'SatGPS',
 		],
 		'c'=>[
 			'seq_column'=>'health_sequence_id',
 			'tbl_column'=>'health_table_id',
+			'name'=>'sat_health',
 			'class'=>'SatHealth',
 		],
 		'd'=>[
 			'seq_column'=>'img_sequence_id',
 			'tbl_column'=>'img_table_id',
+			'name'=>'sat_img',
 			'class'=>'SatIMG',
 		],
 		'e'=>[
 			'seq_column'=>'imu_sequence_id',
 			'tbl_column'=>'imu_table_id',
+			'name'=>'sat_imu',
 			'class'=>'SatIMU',
 		],
 	];
