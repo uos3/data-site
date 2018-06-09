@@ -178,6 +178,12 @@ class Packet extends Model
 		return $packet;
 	}
 
+	public function getData() {
+		$this->sat_status();
+		$payload_name = Packet::$payloads[$this->payload_type]['name'];
+		$this->$payload_name();
+	}
+
 	public function output($format) {
 		if ($format == 'JSON' || $format == "json" || $format == "Json") {
 			return $this->toJson();

@@ -47,12 +47,16 @@
 					</tr>
 				</thead>
 				@foreach ($packets as $packet)
+					<?php
+						$packet->sat_status();
+						$payload_name = $payloads[$packet->payload_type]['name'];
+			 		?>
 					<tr>
 						<td>
-							{{$packet->id}}
+							{{$packet->sat_status->spacecraft_time}}
 						</td>
 						<td>
-							{{$payloads[$packet->payload_type]['name']}}
+							{{$payload_name}}
 						</td>
 						<td>
 							<a href="">show packet</a>
