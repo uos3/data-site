@@ -9,7 +9,7 @@
 
     </head>
 
-    <body class="page-welcome">
+    <body class="">
       <nav class="navbar navbar-default navbar-static-top">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -51,7 +51,7 @@
         </div><!--/.nav-collapse -->
       </div>
     </nav>
-    <div id="wrapper">
+    <div class="l-wrapper">
 			@if (session('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}

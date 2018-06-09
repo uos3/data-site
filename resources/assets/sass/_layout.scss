@@ -11,6 +11,13 @@ body {
 
 }
 
+a {
+  color:$color-links;
+}
+
+a:hover,a:focus,a:active {
+  color:$color-links-dark;
+}
 
 .navbar-default {
   font-family:$headings-font-family;
@@ -34,17 +41,11 @@ body {
   }
 }
 
-
-
-
-
 nav ul li {
   margin:0;
   padding:0;
   display:inline-block;
 }
-
-
 
 #main-header {
   z-index:9000;
@@ -105,22 +106,60 @@ nav ul li {
   }
 }
 
-.wrapper {
+.l-wrapper {
     height: auto !important;
     height: 100%;
 }
 
+
 //.user-menu for mobile - text-align:center
 
-.content {
+.l-page-content,.content {
   line-height:1.4em;
   padding:1em;
   padding-top:2em;
 }
 
-.content p {
+.l-page-content p, .content p {
   margin-bottom:1em;
 }
+
+.c-data-card {
+  background-color:white;
+  padding:1em;
+}
+
+//TODO add breakpoint for medium-size screens (intro+ last packets on one row, sat status on 2nd)
+
+@media #{$b-sm-up} {
+  .l-page-content {
+    display:flex;
+    justify-content:space-between;
+  }
+  .c-home-intro {
+    width: 30%;
+  }
+
+  .l-home-data {
+    width: 60%;
+    flex-grow:2;
+    display:flex;
+    flex-wrap: wrap;
+    justify-content:space-between;
+  }
+
+  .c-data-fswitch {
+    width:100%;
+  }
+  .c-data-card {
+    width: 49%;
+  }
+}
+
+
+
+
+
 
 #status-graph-box {
   border:1px solid $color-dark;
@@ -175,4 +214,27 @@ footer {
 	margin: 1em auto;
 	background-color: white;
 	border: 1px solid #eee;
+}
+
+.home__intro {
+  color:$color-links-dark;
+}
+
+
+.c-data-fswitch{
+  text-align:right;
+
+  &__link {
+    text-transform:uppercase;
+    display:inline-block;
+    color:#929292;
+    font-weight:bold;
+  }
+  &__link--active {
+    color:$color-links;
+  }
+}
+
+.l-data-block {
+  background-color:white;
 }

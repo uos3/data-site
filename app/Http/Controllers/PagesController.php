@@ -3,6 +3,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use App\User;
+use App\Packet;
 
 /**
  *
@@ -17,7 +18,11 @@ class PagesController extends Controller {
 
 	public function home() {
 		//\Session::flash('status','Noot noot!'); //'flashes' (=shows only once) a notification through the Session ()
-		return view('home');
+		$packets = Packet::orderBy('id', 'desc')->take(10)->get();
+		return view('home')->with([
+			'packets'=>$packets,
+			'payloads'=>Packet::$payloads,
+		]);
 	}
 
 	public function satellite_info() {

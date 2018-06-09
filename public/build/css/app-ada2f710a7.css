@@ -5775,6 +5775,12 @@ body {
   padding-bottom: 5em;
   min-height: 100%; }
 
+a {
+  color: #0378A0; }
+
+a:hover, a:focus, a:active {
+  color: #005A82; }
+
 .navbar-default {
   font-family: "Coda", sans-serif; }
 
@@ -5812,7 +5818,7 @@ nav ul li {
       color: black;
       line-height: 5em; }
     #main-header .user-menu a:hover, #main-header .user-menu a:focus {
-      color: #1B1464; }
+      color: #005A82; }
 
 .menu-col {
   text-align: center; }
@@ -5831,17 +5837,44 @@ nav ul li {
     .pages-menu li a {
       font-size: 1.1em; }
 
-.wrapper {
+.l-wrapper {
   height: auto !important;
   height: 100%; }
 
-.content {
+.l-page-content, .content {
   line-height: 1.4em;
   padding: 1em;
   padding-top: 2em; }
 
-.content p {
+.l-page-content p, .content p {
   margin-bottom: 1em; }
+
+.c-data-card {
+  background-color: white;
+  padding: 1em; }
+
+@media only screen and (min-width: 768px) {
+  .l-page-content {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    justify-content: space-between; }
+  .c-home-intro {
+    width: 30%; }
+  .l-home-data {
+    width: 60%;
+    -ms-flex-positive: 2;
+    flex-grow: 2;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-pack: justify;
+    justify-content: space-between; }
+  .c-data-fswitch {
+    width: 100%; }
+  .c-data-card {
+    width: 49%; } }
 
 #status-graph-box {
   border: 1px solid #041216;
@@ -5888,5 +5921,21 @@ footer {
   margin: 1em auto;
   background-color: white;
   border: 1px solid #eee; }
+
+.home__intro {
+  color: #005A82; }
+
+.c-data-fswitch {
+  text-align: right; }
+  .c-data-fswitch__link {
+    text-transform: uppercase;
+    display: inline-block;
+    color: #929292;
+    font-weight: bold; }
+  .c-data-fswitch__link--active {
+    color: #0378A0; }
+
+.l-data-block {
+  background-color: white; }
 
 /*# sourceMappingURL=app.css.map */

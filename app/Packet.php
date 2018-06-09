@@ -59,6 +59,7 @@ class Packet extends Model
 
 	public static $validation_rules = [];
 
+//the keys are WIP, should correspond to the actual chars being used
 	public static $payloads = [
 		'a'=>[
 			'seq_column'=>'config_sequence_id',
