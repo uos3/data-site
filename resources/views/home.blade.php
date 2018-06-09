@@ -30,7 +30,7 @@
 		<div class="c-data-card">
 			<h2>Last packets</h2>
 			<p>
-				Last submission time:
+				Last submission time: {{$packets->first()->last_submitted}}
 			</p>
 			<table class="table">
 				<thead>
@@ -71,7 +71,13 @@
 		<div class="c-data-card">
 			<h2>Sat status</h2>
 			<p>
-				Last update: xxx
+				<?php
+				$last_packet = $packets->first();
+				$last_packet->sat_status();
+				$last_as_array = $last_packet->toArray();
+				$status = $last_as_array['sat_status'];
+				?>
+				Last update: {{$last_packet->sat_status->downlink_time}}
 			</p>
 			<table class="table">
 				<thead>
@@ -84,18 +90,19 @@
 						</th>
 					</tr>
 				</thead>
-				<tr>
-					<td>
-						a thing
-					</td>
-					<td>
-						a thing
-					</td>
-				</tr>
+				@foreach ($status as $key => $value)
+					<tr>
+						<td>
+							{{$key}}
+						</td>
+						<td>
+							{{$value}}
+						</td>
+					</tr>
+				@endforeach
+
 			</table>
-			<p>
-				<a href="">see all values</a>
-			</p>
+			
 		</div>
 	</div>
 

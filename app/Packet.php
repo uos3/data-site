@@ -59,33 +59,43 @@ class Packet extends Model
 
 	public static $validation_rules = [];
 
+	/*
+WHY THIS?
+The payload keys will change. But I need to use them elsewhere in the code too (mostly to get last packets of type). This seemed like the best option.
+	 */
+	const P_CONFIG = 'a';
+	const P_GPS = 'b';
+	const P_HEALTH = 'c';
+	const P_IMG = 'd';
+	const P_IMU = 'e';
+
 //the keys are WIP, should correspond to the actual chars being used
 	public static $payloads = [
-		'a'=>[
+		Packet::P_CONFIG=>[
 			'seq_column'=>'config_sequence_id',
 			'tbl_column'=>'config_table_id',
 			'name'=>'sat_config',
 			'class'=>'SatConfig',
 		],
-		'b'=>[
+		Packet::P_GPS=>[
 			'seq_column'=>'gps_sequence_id',
 			'tbl_column'=>'gps_table_id',
 			'name'=>'sat_gps',
 			'class'=>'SatGPS',
 		],
-		'c'=>[
+		Packet::P_HEALTH=>[
 			'seq_column'=>'health_sequence_id',
 			'tbl_column'=>'health_table_id',
 			'name'=>'sat_health',
 			'class'=>'SatHealth',
 		],
-		'd'=>[
+		Packet::P_IMG=>[
 			'seq_column'=>'img_sequence_id',
 			'tbl_column'=>'img_table_id',
 			'name'=>'sat_img',
 			'class'=>'SatIMG',
 		],
-		'e'=>[
+		Packet::P_IMU=>[
 			'seq_column'=>'imu_sequence_id',
 			'tbl_column'=>'imu_table_id',
 			'name'=>'sat_imu',
@@ -163,7 +173,7 @@ class Packet extends Model
  * @param String $type Get packet with payload of a certain type.
  * @return Packet|null The last packet, or null if no packets.
  */
-	public static function last($type) {
+	public static function last($type=false) {
 		if (!$type) {
 			$packet =  Packet::with('sat_config','sat_status','sat_health','sat_gps','sat_imu','sat_img')
 			->orderBy('last_submitted', 'desc')
