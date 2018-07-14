@@ -55,7 +55,7 @@
 							{{$payload_name}}
 						</td>
 						<td>
-							<a href="{{$packet->getUrl()}}">show data</a>
+							<a href="{{$packet->getUrl()}}">(show)</a>
 						</td>
 					</tr>
 				@endforeach
