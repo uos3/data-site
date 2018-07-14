@@ -5,8 +5,8 @@
 @section('content')
 
 <div class="l-page-content">
-	<div class="c-home-intro c-left-text">
-		<strong class="home__intro">Welcome to the UoS<sup>3</sup> data site.</strong>
+	<div class="c-left-text">
+		<h2>Last packets</h2>
 		<p>
 			This site has two goals:
 		</p>
@@ -27,11 +27,7 @@
 			<a href="" class="js-data-table c-data-fswitch__link  c-data-fswitch__link--active">table</a>
 			<a href="" class="js-data-dashboard c-data-fswitch__link">dashboard</a>
 		</div>
-		<div class="c-data-card">
-			<h2>Last packets</h2>
-			<p>
-				Last submission time: {{$packets->first()->last_submitted}}
-			</p>
+		<div class="c-data-card c-data-card--full">
 			<table class="table">
 				<thead>
 					<tr>
@@ -56,7 +52,7 @@
 							{{$packet->sat_status->spacecraft_time}}
 						</td>
 						<td>
-							{{$packet->getPayloadType()}}
+							{{$payload_name}}
 						</td>
 						<td>
 							<a href="{{$packet->getUrl()}}">show data</a>
@@ -65,44 +61,8 @@
 				@endforeach
 			</table>
 			<p>
-				<a href="/packets">see all packets</a>
+				{{ $packets->links() }}
 			</p>
-		</div>
-		<div class="c-data-card">
-			<h2>Sat status</h2>
-			<p>
-				<?php
-				$last_packet = $packets->first();
-				$last_packet->sat_status();
-				$last_as_array = $last_packet->toArray();
-				$status = $last_as_array['sat_status'];
-				?>
-				Last update: {{$last_packet->sat_status->downlink_time}}
-			</p>
-			<table class="table">
-				<thead>
-					<tr>
-						<th>
-							Key
-						</th>
-						<th>
-							Value
-						</th>
-					</tr>
-				</thead>
-				@foreach ($status as $key => $value)
-					<tr>
-						<td>
-							{{$key}}
-						</td>
-						<td>
-							{{$value}}
-						</td>
-					</tr>
-				@endforeach
-
-			</table>
-
 		</div>
 	</div>
 

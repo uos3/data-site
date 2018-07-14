@@ -5859,9 +5859,9 @@ nav ul li {
     display: flex;
     -ms-flex-pack: justify;
     justify-content: space-between; }
-  .c-home-intro {
+  .c-left-text {
     width: 30%; }
-  .l-home-data {
+  .l-data-pane {
     width: 60%;
     -ms-flex-positive: 2;
     flex-grow: 2;
@@ -5874,7 +5874,9 @@ nav ul li {
   .c-data-fswitch {
     width: 100%; }
   .c-data-card {
-    width: 49%; } }
+    width: 49%; }
+  .c-data-card--full {
+    width: 100%; } }
 
 #status-graph-box {
   border: 1px solid #041216;

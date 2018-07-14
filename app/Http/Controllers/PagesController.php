@@ -29,6 +29,25 @@ class PagesController extends Controller {
 		return view('satellite_info');
 	}
 
+	public function packets() {
+		$packets = Packet::orderBy('id', 'desc')->paginate(50);
+		return view('packets')->with([
+			'packets'=>$packets,
+			'payloads'=>Packet::$payloads,
+		]);
+	}
+
+	public function packet_single($id) {
+		$packet = Packet::with('sat_config','sat_status','sat_health','sat_gps','sat_imu','sat_img')->findOrFail($id);
+
+		//if not found, error, 404
+		//if found, show
+		return view('packet_single')->with([
+			'packet'=>$packet,
+			'payloads'=>Packet::$payloads,
+		]);
+	}
+
 	public function about() {
 		return view('about')->with("version",'<strong style="color:red">1</strong>');
 	}

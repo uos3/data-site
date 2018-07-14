@@ -59,6 +59,8 @@ class Packet extends Model
 
 	public static $validation_rules = [];
 
+	public static $endpoint = "/packets/";
+
 	/*
 WHY THIS?
 The payload keys will change. But I need to use them elsewhere in the code too (mostly to get last packets of type). This seemed like the best option.
@@ -192,6 +194,31 @@ The payload keys will change. But I need to use them elsewhere in the code too (
 		$this->sat_status();
 		$payload_name = Packet::$payloads[$this->payload_type]['name'];
 		$this->$payload_name();
+	}
+
+	public function getUrl() {
+		return Packet::$endpoint.$this->id;
+	}
+
+	public function getPayloadType() {
+		return Packet::$payloads[$this->payload_type]['class'];
+	}
+
+	public function payloadAsArray() {
+		$payload_type_name = Packet::$payloads[$this->payload_type]['name'];
+		return $this->$payload_type_name->toArray();
+	}
+
+	//TODO get public submitters and return as array
+	public function getPublicSubmitters() {
+		//go through submissions
+		//find submissions of this packet with a user ID
+		//see if user is public
+		//return an array of public users
+
+		$this->submission();
+		error_log($this);
+		return "";
 	}
 
 	public function output($format) {

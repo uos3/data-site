@@ -11,18 +11,21 @@
 |
 */
 
+//pages
 Route::get('/','PagesController@home');
 Route::get('satellite-info','PagesController@satellite_info');
+Route::get('packets/{id}','PagesController@packet_single');
+Route::get('packets','PagesController@packets');
 Route::get('collected-data','PagesController@collected_data');
 Route::get('leaderboard','PagesController@leaderboard');
 Route::get('submit',['as'=>'submit','uses'=>'PagesController@submit']);
 
-
+//JSON API
 Route::post('data/submit','DataController@submit');
 Route::get('data/submit','DataController@redirect');
-
 Route::get('data/packet/last','DataController@lastPacket');
 
+//csv export
 Route::get('data/export/last','DataController@exportLast');
 
 Route::get('register/verify/{confirmationCode}', [

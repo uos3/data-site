@@ -136,11 +136,11 @@ nav ul li {
     display:flex;
     justify-content:space-between;
   }
-  .c-home-intro {
+  .c-left-text {
     width: 30%;
   }
 
-  .l-home-data {
+  .l-data-pane {
     width: 60%;
     flex-grow:2;
     display:flex;
@@ -153,6 +153,10 @@ nav ul li {
   }
   .c-data-card {
     width: 49%;
+  }
+
+  .c-data-card--full {
+    width: 100%;
   }
 }
 
