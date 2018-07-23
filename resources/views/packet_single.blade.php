@@ -54,6 +54,9 @@
 		</div>
 		<div class="c-data-card">
 			<h2>Payload: {{$packet->getPayloadType()}}</h2>
+			<p>
+				&nbsp;
+			</p>
 			<?php
 			$payload = $packet->payloadAsArray();
 			?>

@@ -5870,9 +5870,12 @@ nav ul li {
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
     -ms-flex-pack: justify;
-    justify-content: space-between; }
+    justify-content: space-between;
+    -ms-flex-align: start;
+    align-items: flex-start; }
   .c-data-fswitch {
-    width: 100%; }
+    width: 100%;
+    display: none; }
   .c-data-card {
     width: 49%; }
   .c-data-card--full {

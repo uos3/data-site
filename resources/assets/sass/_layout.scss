@@ -146,10 +146,12 @@ nav ul li {
     display:flex;
     flex-wrap: wrap;
     justify-content:space-between;
+    align-items: flex-start;
   }
 
   .c-data-fswitch {
     width:100%;
+    display:none; //WIP - not yet implemented
   }
   .c-data-card {
     width: 49%;
