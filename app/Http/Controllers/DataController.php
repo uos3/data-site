@@ -141,6 +141,11 @@ class DataController extends Controller
       return $data;
     }
 
+    /**
+     * Process and store API submission.
+     * @param  Request $request
+     * @return String $json JSON success/error message
+     */
     public function submit(Request $request) {
 
       $app_key = $request->input('app_key');
