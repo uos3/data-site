@@ -27,6 +27,11 @@
 			<a href="" class="js-data-table c-data-fswitch__link  c-data-fswitch__link--active">table</a>
 			<a href="" class="js-data-dashboard c-data-fswitch__link">dashboard</a>
 		</div>
+		@if ($packets->isEmpty())
+			<div class="c-data-card">
+				Uh oh, no packets found in the database.
+			</div>
+		@else
 		<div class="c-data-card c-data-card--full">
 			<table class="table">
 				<thead>
@@ -64,6 +69,7 @@
 				{{ $packets->links() }}
 			</p>
 		</div>
+	@endif
 	</div>
 
 

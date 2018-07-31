@@ -27,10 +27,18 @@
 			<a href="" class="js-data-table c-data-fswitch__link  c-data-fswitch__link--active">table</a>
 			<a href="" class="js-data-dashboard c-data-fswitch__link">dashboard</a>
 		</div>
+		@if ($packets->isEmpty())
+			<div class="c-data-card">
+				Uh oh, no packets found in the database.
+			</div>
+		@else
+		<?php
+			$last_packet = $packets->first();
+		?>
 		<div class="c-data-card">
 			<h2>Last packets</h2>
 			<p>
-				Last submission time: {{$packets->first()->last_submitted}}
+				Last submission time: {{$last_packet->last_submitted}}
 			</p>
 			<table class="table">
 				<thead>
@@ -72,7 +80,6 @@
 			<h2>Sat status</h2>
 			<p>
 				<?php
-				$last_packet = $packets->first();
 				$last_packet->sat_status();
 				$last_as_array = $last_packet->toArray();
 				$status = $last_as_array['sat_status'];
@@ -104,6 +111,7 @@
 			</table>
 
 		</div>
+	@endif
 	</div>
 
 
