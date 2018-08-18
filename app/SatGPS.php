@@ -24,6 +24,8 @@ class SatGPS extends Model
 'vdop',
 'pdop',
 'tdop',
+'sequence_id',
+'packet_id',
   ];
 
 	protected $hidden = [
