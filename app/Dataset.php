@@ -9,6 +9,8 @@ use App\SatHealth;
 use App\SatIMG;
 use App\SatStatus;
 
+use Exception;
+
 class Dataset {
   public $packets = [
     'sat_status'=>[],
