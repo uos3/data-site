@@ -222,9 +222,9 @@ The payload keys will change. But I need to use them elsewhere in the code too (
 	}
 
 	public function output($format) {
-		if ($format == 'JSON' || $format == "json" || $format == "Json") {
+		if (strtolower($format) == 'json') {
 			return $this->toJson();
-    } else if($format == 'CSV' || $format == "csv" || $format == "Csv") {
+    } else if(strtolower($format) == 'csv') {
 			return $this->toCsv();
 		}
 		 else {

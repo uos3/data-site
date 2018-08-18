@@ -184,19 +184,19 @@ class DataController extends Controller
       }
 
 //the API can take either JSON or as base64-encoded binary file that needs to be decoded by the planned C++ script
-      $plain = (bool) $request->input('plain',FALSE);
-
-      if ($plain) {
+      $format = $request->input('format','json');
+      if (strtolower($format) == 'json') {
+        $data = $request->input('data');
+        $data_input = json_encode($request->input('data'));
+      } else if (strtolower($format) == 'binary') {
         try {
             $data = $this->parseBinary($request->input('data'));
         } catch (Exception $e) {
             return response($e->getMessage(),500);
         }
-        $data_input = $request->input('data');
       } else {
-        $data = $request->input('data');
-        $data_input = json_encode($request->input('data'));
-      };
+        return response("Input format not implemented.",400);
+      }
 
       if (!$data) {
         Submission::saveFailed($user_id,$ip,$downlink_time,$data_input);
@@ -299,14 +299,14 @@ class DataController extends Controller
     $format = $request->get('format','json');
     //option to export only the data (i.e. for collecting snapshots over time)
 
-    if ($format == 'JSON' || $format == "json" || $format == "Json") {
+    if (strtolower($format) == 'json') {
       try {
         $output = $dataset->toArray();
         return $output;
       } catch (Exception $e) {
         return response($e->getMessage(),500);
       }
-    } else if ($format == 'CSV' || $format == "csv" || $format == "Csv") {
+    } else if (strtolower($format) == 'csv') {
       $output = $dataset->toFlatArray();
       $output_string = '';
       $output_string.= implode(array_keys($output),",")."\n";
