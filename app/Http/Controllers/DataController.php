@@ -93,52 +93,53 @@ class DataController extends Controller
       return TRUE;
     }
 
-    /**
-    * STUB. Convert binary data to php array/object.
-    *
-    * @param string $data_encoded  Base64-encoded binary data from the SDR plugin.
-    * @return Array $data Array of decoded values.
-    *
-    */
-    private function parseBinary($data_encoded) {
-      if (is_string($data_encoded)===false || base64_decode($str, true) === false)
+    private function base64toBinary($input) {
+      if (is_string($input)===false)
       {
           throw new Exception("Not a base64 string.", 1);
       }
-
-      $data = [
-        'payload_type'=>'a',
-        'status'=> [
-            'sequence_id'=>2,
-            'spacecraft_id'=>'x',
-            'spacecraft_time'=>'2018-02-18 21:00:00',
-            'time_source'=>'x',
-            'not_actually_a_value'=>'x'
-        ],
-        'payload' => [
-            'tx_enable'=>true,
-            'sequence_id'=>6,
-        ],
-        'hash'=>'',
-        'checksum'=>'',
-      ];
-      //$data = false;
-      /*
-
-      //use a Validator to validate all the values. Maybe several validator for the data parts, build them elsewhere, and reuse them???
-      $validator = Validator::make($data,[
-        'hash'=>'required'
-      ]);
-
-      if ($validator->fails()) {
-        return "things went bad";
+      $binary = base64_decode($input, true);
+      if ($binary === false) {
+        throw new Exception("Not a base64 string.", 1);
       }
-      */
 
-      //maybe instead: validate the fields inside the C++ parser, so I don't have to bother here?
-      //...why am I even validating? if the hash and CRC matches, the values MUST be correct, right?
+      return $binary;
+    }
+
+    /**
+    * Decode uploaded bin file.
+    *
+    * @param UploadedFile $binary_file Binary file uploaded by user.
+    * @return Array $data Array of decoded values.
+    *
+    */
+    private function binaryDecode($binary_file) {
+      //TODO the crc and hash should be validated during decoding by the C++ app.
+      $binfile_path = $binary_file->getRealPath();
+      $telemetry_app_path = env('TELEMETRY_APP_PATH','uos3_telemetry_app');
+      $command = "$telemetry_app_path parse $binfile_path";
+      exec($command,$output_lines_array,$return);
+
+      if (!$return === 0) {
+        throw new Exception("Telemetry app failed to parse the binary.");
+      }
+
+      $json_string = implode($output_lines_array,'');
+      $output = json_decode($json_string,true);
+
+      if ($output === NULL) {
+        throw new Exception("The telemetry app output is not valid JSON and couldn't be decoded.");
+      }
+
+      $data = $output['p'];
+
+      //TODO Maybe this could be done better with Laravel validators?
+      if (!array_key_exists('payload_type',$data)) {
+        throw new Exception("Decoded JSON doesn't contain expected keys: 'payload_type'.");
+      }
 
       return $data;
+      //??? peculiarity of the telemetry app output.
     }
 
     /**
@@ -177,29 +178,46 @@ class DataController extends Controller
         $user_id = null;
       }
 
-      $downlink_time = $request->input('downlink_time'); //this isn't in the binary
+      $format = strtolower($request->input('format','binary'));
 
-      if ($request->input('data') == '') {
-        return response("No data submitted.",400);
-      }
-
-//the API can take either JSON or as base64-encoded binary file that needs to be decoded by the planned C++ script
-      $format = $request->input('format','json');
-      if (strtolower($format) == 'json') {
-        $data = $request->input('data');
-        $data_input = json_encode($request->input('data'));
-      } else if (strtolower($format) == 'binary') {
-        try {
-            $data = $this->parseBinary($request->input('data'));
-        } catch (Exception $e) {
-            return response($e->getMessage(),500);
+      if ($format == 'binary') {
+        if (!$request->hasFile('data')) {
+          return response("No data submitted.",400);
         }
+        if (!$request->file('data')->isValid()) {
+          return response("Error on upload.",400);
+        }
+        if ($request->file('data')->getMimeType() !== 'application/octet-stream') {
+          return response("File is not in correct format. Format expected: 'application/octet-stream'. Format received: '".$request->file('data')->getMimeType()."'." ,400);
+        }
+        $data_binfile = $request->file('data');
+        $data_orig_format = file_get_contents($data_binfile->getRealPath());
+        //this is the orig binary, to be saved to DB
+
+        try {
+          $data = $this->binaryDecode($data_binfile);
+        } catch (Exception $e) {
+          return response($e->getMessage(),500);
+        }
+
+      } else if ($format == 'json') {
+        return response('Submission format temporarily unavailable.', 500);
+        //TODO NO! there is no data validation! if someone were to learn about this option and wanted to do damage, they could submit incorrect data!
+
+        if ($request->input('data') == '') {
+          return response("No data submitted.",400);
+        }
+        $data_orig_format = json_encode($request->input('data')); //data was submitted as JSON
+        $data = $request->input('data');
       } else {
         return response("Input format not implemented.",400);
       }
 
+      $downlink_time = $request->input('downlink_time'); //this isn't in the binary
+      //$checksum = $request->input('checksum'); //this was mentioned in the Slack convo. But is it necessary when telemetry app is doing the parsing?
+
       if (!$data) {
-        Submission::saveFailed($user_id,$ip,$downlink_time,$data_input);
+        Submission::saveFailed($user_id,$ip,null,$downlink_time,$data_orig_format);
 
         return response('Upload failed, checksum incorrect.',400);
       }
@@ -235,7 +253,7 @@ class DataController extends Controller
 
           $packet->savePayload($data['payload']);
 
-          Submission::saveSuccessful($user_id,$ip,$packet->id,$downlink_time,$data_input);
+          Submission::saveSuccessful($user_id,$ip,$packet->id,$downlink_time,$data_orig_format);
 
           $result_message = "New packet created. ID: ".$packet->id;
 
@@ -244,7 +262,7 @@ class DataController extends Controller
           //packet already in the db, only update timestamp
           $packet->last_submitted = Carbon::now()->toDateTimeString();
           $packet->save();
-          Submission::saveSuccessful($user_id,$ip,$packet->id,$downlink_time,$data_input );
+          Submission::saveSuccessful($user_id,$ip,$packet->id,$downlink_time,$data_orig_format );
           $result_message = "Packet already exists. ID: ".$packet->id;
       };
 
