@@ -18,7 +18,6 @@ class Submission extends Model
 		'downlink_time',
 		'user_id',
 		'ip_address',
-		'sequence_id',
 		'checksum_success',
 		'packet_id',
 	];

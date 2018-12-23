@@ -62,14 +62,15 @@ class Packet extends Model
 	public static $endpoint = "/packets/";
 
 	/*
-WHY THIS?
-The payload keys will change. But I need to use them elsewhere in the code too (mostly to get last packets of type). This seemed like the best option.
+	Packet types from UoS3_TMTC_20180622_v1.2.xlsx
 	 */
-	const P_CONFIG = 'a';
-	const P_GPS = 'b';
-	const P_HEALTH = 'c';
-	const P_IMG = 'd';
-	const P_IMU = 'e';
+	const P_CONFIG = '5';
+	const P_GPS = '1';
+	const P_HEALTH = '3';
+	const P_IMG = '4';
+	const P_IMU = '2';
+
+	const status_key_column = 'status_sequence_id';
 
 //the keys are WIP, should correspond to the actual chars being used
 	public static $payloads = [
@@ -78,30 +79,35 @@ The payload keys will change. But I need to use them elsewhere in the code too (
 			'tbl_column'=>'config_table_id',
 			'name'=>'sat_config',
 			'class'=>'SatConfig',
+			'json_key'=>'payload.config'
 		],
 		Packet::P_GPS=>[
 			'seq_column'=>'gps_sequence_id',
 			'tbl_column'=>'gps_table_id',
 			'name'=>'sat_gps',
 			'class'=>'SatGPS',
+			'json_key'=>'payload.gps'
 		],
 		Packet::P_HEALTH=>[
 			'seq_column'=>'health_sequence_id',
 			'tbl_column'=>'health_table_id',
 			'name'=>'sat_health',
 			'class'=>'SatHealth',
+			'json_key'=>'payload.health'
 		],
 		Packet::P_IMG=>[
 			'seq_column'=>'img_sequence_id',
 			'tbl_column'=>'img_table_id',
 			'name'=>'sat_img',
 			'class'=>'SatIMG',
+			'json_key'=>'payload.img'
 		],
 		Packet::P_IMU=>[
 			'seq_column'=>'imu_sequence_id',
 			'tbl_column'=>'imu_table_id',
 			'name'=>'sat_imu',
 			'class'=>'SatIMU',
+			'json_key'=>'payload.imu'
 		],
 	];
 
@@ -157,13 +163,31 @@ The payload keys will change. But I need to use them elsewhere in the code too (
 		$this->save();
 	}
 
-	public static function find($payload_type,$status_seq_id,$payload_seq_id,$checksum) {
+	/**
+	 * Method that finds whether a specific data packet has been uploaded to the server yet. It uses a combination of parameters to identify it.
+	 * @param  Integer $payload_type   Packet::P_CONFIG/...
+	 * @param  [type] $beacon_id  [description]
+	 * @param  [type] $dataset_id [description]
+	 * @param  [type] $checksum       [description]
+	 * @return [type]                 [description]
+	 */
+	public static function findPreviouslyUploaded($payload_type,$beacon_id,$dataset_id,$checksum) {
 		$payload_seq_column = Packet::$payloads[$payload_type]['seq_column'];
+		// TODO rename this after the DB is updated!
+		//
+		// we check:
+		// time from last upload
+		// beacon_id (previously status_sequence_id)
+		// payload type
+		// dataset_id (previously [payloadtype]_sequence_id)
+		// checksum
+		//
 		$last_valid = Carbon::now()->subHours(12)->toDateTimeString();
+
 		$packet = Packet::whereDate('last_submitted','<',$last_valid)
-			->where('status_sequence_id',$status_seq_id)
+			->where(Packet::status_key_column,$beacon_id)
 			->where('payload_type',$payload_type)
-			->where($payload_seq_column,$payload_seq_id)
+			->where($payload_seq_column,$dataset_id)
 			->where('checksum',$checksum)
 			->orderBy('last_submitted', 'desc')
 			->first();

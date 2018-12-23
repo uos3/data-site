@@ -133,9 +133,9 @@ class DataController extends Controller
 
       $data = $output['p'];
 
-      //TODO Maybe this could be done better with Laravel validators?
-      if (!array_key_exists('payload_type',$data)) {
-        throw new Exception("Decoded JSON doesn't contain expected keys: 'payload_type'.");
+      //TODO Maybe this could be done with Laravel validators?
+      if (!array_key_exists('type',$data)) {
+        throw new Exception("Decoded JSON doesn't contain expected keys: 'type'.");
       }
 
       return $data;
@@ -200,9 +200,8 @@ class DataController extends Controller
           return response($e->getMessage(),500);
         }
 
-      } else if ($format == 'json') {
-        return response('Submission format temporarily unavailable.', 500);
-        //TODO NO! there is no data validation! if someone were to learn about this option and wanted to do damage, they could submit incorrect data!
+      } else if ($format == 'json' && getenv('APP_DEBUG')) {
+        // allow JSON input on dev server for testing purposes.
 
         if ($request->input('data') == '') {
           return response("No data submitted.",400);
@@ -222,48 +221,60 @@ class DataController extends Controller
         return response('Upload failed, checksum incorrect.',400);
       }
 
-      if (!array_key_exists($data['payload_type'],Packet::$payloads)) {
+      if (!array_key_exists($data['type'],Packet::$payloads)) {
         return response("Invalid payload type.",400);
       }
 
-      $status_seq_id = $data['status']['sequence_id'];
-      $payload_seq_id = $data['payload']['sequence_id'];
-      $packet = Packet::find($data['payload_type'],$status_seq_id,$payload_seq_id,$data['checksum']);
+      //what do I need?
+      //the payload, for saving
+      //the beacon_id
+      //the dataset_id
+      //(and I need to change the db to rename these, ugh)
+
+      $payload_config = Packet::$payloads[$data['type']];
+
+      $payload = $data[$payload_config['json_key']];
+      $beacon_id = $data['status']['beacon_id'];
+      $dataset_id = $payload['dataset_id'];
+
+      $previously_uploaded_packet = Packet::findPreviouslyUploaded($data['type'],$beacon_id,$dataset_id,$data['crc']);
 
       $result_message;
-      if (!$packet) {
+      if (!$previously_uploaded_packet) {
         //create new packet
           //Log::info('NO PACKET!');
-          $packet = Packet::create([
-            'status_sequence_id'=>$status_seq_id,
+          $new_packet = Packet::create([
+            Packet::status_key_column => $beacon_id, //TODO change column name to 'beacon_id'
             'last_submitted'=> Carbon::now()->toDateTimeString(),
-            'checksum'=>$data['checksum'],
+            'checksum'=>$data['crc'],
             'hash'=>$data['hash'],
-            'payload_type'=>$data['payload_type'],
+            'payload_type'=>$data['type'],
+            'dataset_id'=>$dataset_id, // TODO doesn't work ATM, the column does not exist
           ]);
+
 
           //add packet_id to status data
           $status_data = $data['status'];
-          $status_data['packet_id'] = $packet->id;
+          $status_data['packet_id'] = $new_packet->id;
 
           //save status data
           $sat_status = SatStatus::create($status_data);
-          $packet->status_table_id = $sat_status->id;
-          $packet->save();
+          $new_packet->status_table_id = $sat_status->id;
+          $new_packet->save();
 
-          $packet->savePayload($data['payload']);
+          $new_packet->savePayload($payload);
 
-          Submission::saveSuccessful($user_id,$ip,$packet->id,$downlink_time,$data_orig_format);
+          Submission::saveSuccessful($user_id,$ip,$new_packet->id,$downlink_time,$data_orig_format);
 
-          $result_message = "New packet created. ID: ".$packet->id;
+          $result_message = "New packet created. ID: ".$new_packet->id;
 
       } else {
           //Log::info('Found packet, id: '.$packet->id);
           //packet already in the db, only update timestamp
-          $packet->last_submitted = Carbon::now()->toDateTimeString();
-          $packet->save();
-          Submission::saveSuccessful($user_id,$ip,$packet->id,$downlink_time,$data_orig_format );
-          $result_message = "Packet already exists. ID: ".$packet->id;
+          $previously_uploaded_packet->last_submitted = Carbon::now()->toDateTimeString();
+          $previously_uploaded_packet->save();
+          Submission::saveSuccessful($user_id,$ip,$previously_uploaded_packet->id,$downlink_time,$data_orig_format );
+          $result_message = "Packet already exists. ID: ".$previously_uploaded_packet->id;
       };
 
 
