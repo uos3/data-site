@@ -15,7 +15,7 @@ class SatHealth extends Model
      */
 
   protected $fillable = [
-		'sequence_id',
+		'dataset_id',
 		'timestamp',
 		'obc_temperature',
 		'rx_temperature',

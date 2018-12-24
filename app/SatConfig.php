@@ -19,7 +19,7 @@ class SatConfig extends Model
      */
 
   protected $fillable = [
-    'sequence_id',
+    'dataset_id',
 		'tx_enable',
 		'tx_interval_beacon',
 		'tx_interval_downlink',

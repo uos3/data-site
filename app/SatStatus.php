@@ -38,7 +38,7 @@ class SatStatus extends Model
 		'tx_temperature',
 		'pa_temperature',
 		'rx_noisefloor',
-		'sequence_id',
+		'beacon_id',
 		'packet_id',
 	];
 

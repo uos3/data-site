@@ -22,36 +22,26 @@ class Packet extends Model
 
   protected $fillable = [
     'status_table_id',
-		'status_sequence_id',
 		'health_table_id',
-		'health_sequence_id',
 		'imu_table_id',
-		'imu_sequence_id',
 		'img_table_id',
-		'img_sequence_id',
 		'gps_table_id',
-		'gps_sequence_id',
 		'config_table_id',
-		'config_sequence_id',
+		'dataset_id',
+		'beacon_id',
 		'last_submitted',
-		'checksum',
+		'crc',
 		'hash',
-		'payload_type'
+		'type'
   ];
 
 	protected $hidden = [
 		'status_table_id',
-		'status_sequence_id',
 		'health_table_id',
-		'health_sequence_id',
 		'imu_table_id',
-		'imu_sequence_id',
 		'img_table_id',
-		'img_sequence_id',
 		'gps_table_id',
-		'gps_sequence_id',
 		'config_table_id',
-		'config_sequence_id',
 	];
 
 
@@ -70,40 +60,33 @@ class Packet extends Model
 	const P_IMG = '4';
 	const P_IMU = '2';
 
-	const status_key_column = 'status_sequence_id';
-
 //the keys are WIP, should correspond to the actual chars being used
 	public static $payloads = [
 		Packet::P_CONFIG=>[
-			'seq_column'=>'config_sequence_id',
 			'tbl_column'=>'config_table_id',
 			'name'=>'sat_config',
 			'class'=>'SatConfig',
 			'json_key'=>'payload.config'
 		],
 		Packet::P_GPS=>[
-			'seq_column'=>'gps_sequence_id',
 			'tbl_column'=>'gps_table_id',
 			'name'=>'sat_gps',
 			'class'=>'SatGPS',
 			'json_key'=>'payload.gps'
 		],
 		Packet::P_HEALTH=>[
-			'seq_column'=>'health_sequence_id',
 			'tbl_column'=>'health_table_id',
 			'name'=>'sat_health',
 			'class'=>'SatHealth',
 			'json_key'=>'payload.health'
 		],
 		Packet::P_IMG=>[
-			'seq_column'=>'img_sequence_id',
 			'tbl_column'=>'img_table_id',
 			'name'=>'sat_img',
 			'class'=>'SatIMG',
 			'json_key'=>'payload.img'
 		],
 		Packet::P_IMU=>[
-			'seq_column'=>'imu_sequence_id',
 			'tbl_column'=>'imu_table_id',
 			'name'=>'sat_imu',
 			'class'=>'SatIMU',
@@ -149,30 +132,28 @@ class Packet extends Model
 
 
 	public function savePayload($payload) {
-		$payload_class = "App\\".Packet::$payloads[$this->payload_type]['class'];
+		$payload_class = "App\\".Packet::$payloads[$this->type]['class'];
 		$payload_model = new $payload_class;
 
 		$payload_model->fill($payload);
 		$payload_model->packet_id = $this->id;
 		$payload_model->save();
 
-		$payload_tbl_column = Packet::$payloads[$this->payload_type]['tbl_column'];
+		$payload_tbl_column = Packet::$payloads[$this->type]['tbl_column'];
 		$this->$payload_tbl_column = $payload_model->id;
-		$payload_seq_column = Packet::$payloads[$this->payload_type]['seq_column'];
-		$this->$payload_seq_column = $payload_model->sequence_id;
+		$this->dataset_id = $payload['dataset_id'];
 		$this->save();
 	}
 
 	/**
 	 * Method that finds whether a specific data packet has been uploaded to the server yet. It uses a combination of parameters to identify it.
-	 * @param  Integer $payload_type   Packet::P_CONFIG/...
+	 * @param  Integer $type   Packet::P_CONFIG/...
 	 * @param  [type] $beacon_id  [description]
 	 * @param  [type] $dataset_id [description]
 	 * @param  [type] $checksum       [description]
 	 * @return [type]                 [description]
 	 */
-	public static function findPreviouslyUploaded($payload_type,$beacon_id,$dataset_id,$checksum) {
-		$payload_seq_column = Packet::$payloads[$payload_type]['seq_column'];
+	public static function findPreviouslyUploaded($type,$beacon_id,$dataset_id,$crc) {
 		// TODO rename this after the DB is updated!
 		//
 		// we check:
@@ -185,10 +166,10 @@ class Packet extends Model
 		$last_valid = Carbon::now()->subHours(12)->toDateTimeString();
 
 		$packet = Packet::whereDate('last_submitted','<',$last_valid)
-			->where(Packet::status_key_column,$beacon_id)
-			->where('payload_type',$payload_type)
-			->where($payload_seq_column,$dataset_id)
-			->where('checksum',$checksum)
+			->where('beacon_id',$beacon_id)
+			->where('type',$type)
+			->where('dataset_id',$dataset_id)
+			->where('crc',$crc)
 			->orderBy('last_submitted', 'desc')
 			->first();
 
@@ -206,7 +187,7 @@ class Packet extends Model
 			->first();
 		} else {
 			$packet =  Packet::with('sat_config','sat_status','sat_health','sat_gps','sat_imu','sat_img')
-			->where('payload_type',$type)
+			->where('type',$type)
 			->orderBy('last_submitted', 'desc')
 			->first();
 		}
@@ -216,7 +197,7 @@ class Packet extends Model
 
 	public function getData() {
 		$this->sat_status();
-		$payload_name = Packet::$payloads[$this->payload_type]['name'];
+		$payload_name = Packet::$payloads[$this->type]['name'];
 		$this->$payload_name();
 	}
 
@@ -225,12 +206,12 @@ class Packet extends Model
 	}
 
 	public function getPayloadType() {
-		return Packet::$payloads[$this->payload_type]['class'];
+		return Packet::$payloads[$this->type]['class'];
 	}
 
 	public function payloadAsArray() {
-		$payload_type_name = Packet::$payloads[$this->payload_type]['name'];
-		return $this->$payload_type_name->toArray();
+		$type_name = Packet::$payloads[$this->type]['name'];
+		return $this->$type_name->toArray();
 	}
 
 	//TODO get public submitters and return as array
@@ -258,16 +239,16 @@ class Packet extends Model
 
 	public function toCsv() {
 		$output_array = $this->toArray();
-		$payload_type_name = Packet::$payloads[$this->payload_type]['name'];
+		$type_name = Packet::$payloads[$this->type]['name'];
 		$sat_status = $output_array['sat_status'];
 		unset($output_array['sat_status']);
 		foreach($sat_status as $key=>$value) {
 			$output_array["sat_status.".$key]=$value;
 		}
-		$payload = $output_array[$payload_type_name];
-		unset($output_array[$payload_type_name]);
+		$payload = $output_array[$type_name];
+		unset($output_array[$type_name]);
 		foreach($payload as $key=>$value) {
-			$output_array[$payload_type_name.".".$key]=$value;
+			$output_array[$type_name.".".$key]=$value;
 		}
 		$output_string = "";
 		$output_string.= implode(array_keys($output_array),",")."\n";

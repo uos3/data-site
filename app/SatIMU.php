@@ -14,7 +14,7 @@ class SatIMU extends Model
      */
 
   protected $fillable = [
-'sequence_id',
+'dataset_id',
 'timestamp',
 'mag_x',
 'mag_y',

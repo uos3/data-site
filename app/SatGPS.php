@@ -15,17 +15,16 @@ class SatGPS extends Model
      */
 
   protected $fillable = [
-'submission_id',
-'timestamp',
-'lat',
-'lon',
-'alt',
-'hdop',
-'vdop',
-'pdop',
-'tdop',
-'sequence_id',
-'packet_id',
+		'timestamp',
+		'lat',
+		'lon',
+		'alt',
+		'hdop',
+		'vdop',
+		'pdop',
+		'tdop',
+		'dataset_id',
+		'packet_id',
   ];
 
 	protected $hidden = [

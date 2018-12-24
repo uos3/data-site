@@ -244,12 +244,12 @@ class DataController extends Controller
         //create new packet
           //Log::info('NO PACKET!');
           $new_packet = Packet::create([
-            Packet::status_key_column => $beacon_id, //TODO change column name to 'beacon_id'
+            'beacon_id' => $beacon_id,
             'last_submitted'=> Carbon::now()->toDateTimeString(),
-            'checksum'=>$data['crc'],
+            'crc'=>$data['crc'],
             'hash'=>$data['hash'],
-            'payload_type'=>$data['type'],
-            'dataset_id'=>$dataset_id, // TODO doesn't work ATM, the column does not exist
+            'type'=>$data['type'],
+            'dataset_id'=>$dataset_id,
           ]);
 
 
