@@ -115,10 +115,19 @@ class DataController extends Controller
     */
     private function binaryDecode($binary_file) {
       //TODO the crc and hash should be validated during decoding by the C++ app.
-      $binfile_path = $binary_file->getRealPath();
-      $telemetry_app_path = env('TELEMETRY_APP_PATH','uos3_telemetry_app');
+
+      //TESTING OPTION. This circumvents the telemetry app and serves a dummy JSON output instead.
+      if (env('DUMMY_BINFILE_PARSE',false)) {
+        $binfile_path = env('DEBUG_DUMMY_JSON_PATH','');
+        $telemetry_app_path = env('DEBUG_TELEMETRY_APP_PATH','');
+      } else {
+        $binfile_path = $binary_file->getRealPath();
+        $telemetry_app_path = env('TELEMETRY_APP_PATH','uos3_telemetry_app');
+      }
       $command = "$telemetry_app_path parse $binfile_path";
+
       exec($command,$output_lines_array,$return);
+      //throw new Exception(print_r($output_lines_array,true));
 
       if (!$return === 0) {
         throw new Exception("Telemetry app failed to parse the binary.");
@@ -131,14 +140,12 @@ class DataController extends Controller
         throw new Exception("The telemetry app output is not valid JSON and couldn't be decoded.");
       }
 
-      $data = $output['p'];
-
       //TODO Maybe this could be done with Laravel validators?
-      if (!array_key_exists('type',$data)) {
+      if (!array_key_exists('type',$output)) {
         throw new Exception("Decoded JSON doesn't contain expected keys: 'type'.");
       }
 
-      return $data;
+      return $output;
       //??? peculiarity of the telemetry app output.
     }
 
