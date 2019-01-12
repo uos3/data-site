@@ -219,7 +219,10 @@ class DataController extends Controller
         return response("Input format not implemented.",400);
       }
 
-      $downlink_time = $request->input('downlink_time'); //this isn't in the binary
+      $downlink_time = $request->input('downlink_time');
+      //this has been present in previous version of the packet spec; it's now unclear whether it's still used or not
+      //if this is not sent, then the db defaults to current timestamp
+
       //$checksum = $request->input('checksum'); //this was mentioned in the Slack convo. But is it necessary when telemetry app is doing the parsing?
 
       if (!$data) {
@@ -260,8 +263,9 @@ class DataController extends Controller
           ]);
 
 
-          //add packet_id to status data
+          //add packet_id & downlink_time to status data
           $status_data = $data['status'];
+          error_log(print_r($status_data,true));
           $status_data['packet_id'] = $new_packet->id;
 
           //save status data

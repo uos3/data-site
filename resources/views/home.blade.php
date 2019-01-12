@@ -44,6 +44,9 @@
 				<thead>
 					<tr>
 						<th>
+							ID
+						</th>
+						<th>
 							Sat time
 						</th>
 						<th>
@@ -57,19 +60,25 @@
 				@foreach ($packets as $packet)
 					<?php
 						$packet->sat_status();
+						error_log(print_r($packet,true));
 						$payload_name = $payloads[$packet->type]['name'];
 			 		?>
-					<tr>
-						<td>
-							{{$packet->sat_status->spacecraft_time}}
-						</td>
-						<td>
-							{{$packet->getPayloadType()}}
-						</td>
-						<td>
-							<a href="{{$packet->getUrl()}}">(show)</a>
-						</td>
-					</tr>
+					@if ($packet->sat_status)
+						<tr>
+							<td>
+								{{$packet->id}}
+							</td>
+							<td>
+								{{$packet->sat_status->time}}
+							</td>
+							<td>
+								{{$packet->getPayloadType()}}
+							</td>
+							<td>
+								<a href="{{$packet->getUrl()}}">(show)</a>
+							</td>
+						</tr>
+					@endif
 				@endforeach
 			</table>
 			<p>
@@ -85,7 +94,7 @@
 				$status = $last_as_array['sat_status'];
 				$status['rails_status'] = implode($status['rails_status'],",");
 				?>
-				Last update: {{$last_packet->sat_status->downlink_time}}
+				Last update: {{$last_packet->sat_status->time}}
 			</p>
 			<table class="table">
 				<thead>

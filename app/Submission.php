@@ -22,6 +22,11 @@ class Submission extends Model
 		'packet_id',
 	];
 
+	protected $dates = [
+		'server_time',
+		'downlink_time'
+	];
+
 	public $timestamps = false; //needed because I'm not using the default timestamp columns (updated_at, created_at), and otherwise php artisan tinker craps itself.
 
 	public static $validation_rules = [

@@ -14,15 +14,13 @@ class SatStatus extends Model
      * @var array
      */
 
-	/*
-  protected $guarded = [
-    'timestamp',
-  ];
-	*/
+	protected $dates = [
+		'time'
+	];
 
 	protected $fillable = [
 		'downlink_time',
-		'spacecraft_time',
+		'time',
 		'time_source',
 		'spacecraft_id',
 		'obc_temperature',
@@ -81,4 +79,6 @@ class SatStatus extends Model
 		}
 		return $rails_string;
 	}
+
+
 }

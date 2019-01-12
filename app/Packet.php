@@ -20,6 +20,10 @@ class Packet extends Model
      * @var array
      */
 
+	protected $dates = [
+		'last_submitted',
+	];
+	
   protected $fillable = [
     'status_table_id',
 		'health_table_id',
