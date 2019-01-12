@@ -50,19 +50,27 @@
 				@foreach ($packets as $packet)
 					<?php
 						$packet->sat_status();
-						$payload_name = $payloads[$packet->payload_type]['name'];
+						$payload_name = $packet->getPayloadType();
+						if (!$payload_name) {
+							$payload_name = "?";
+						}
 			 		?>
-					<tr>
-						<td>
-							{{$packet->sat_status->spacecraft_time}}
-						</td>
-						<td>
-							{{$payload_name}}
-						</td>
-						<td>
-							<a href="{{$packet->getUrl()}}">(show)</a>
-						</td>
-					</tr>
+					@if ($packet->sat_status)
+						<tr>
+							<td>
+								{{$packet->id}}
+							</td>
+							<td>
+								{{$packet->sat_status->time}}
+							</td>
+							<td>
+								{{$payload_name}}
+							</td>
+							<td>
+								<a href="{{$packet->getUrl()}}">(show)</a>
+							</td>
+						</tr>
+					@endif
 				@endforeach
 			</table>
 			<p>

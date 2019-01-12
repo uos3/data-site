@@ -60,8 +60,10 @@
 				@foreach ($packets as $packet)
 					<?php
 						$packet->sat_status();
-						error_log(print_r($packet,true));
-						$payload_name = $payloads[$packet->type]['name'];
+						$payload_name = $packet->getPayloadType();
+						if (!$payload_name) {
+							$payload_name = "?";
+						}
 			 		?>
 					@if ($packet->sat_status)
 						<tr>
@@ -72,7 +74,7 @@
 								{{$packet->sat_status->time}}
 							</td>
 							<td>
-								{{$packet->getPayloadType()}}
+								{{$payload_name}}
 							</td>
 							<td>
 								<a href="{{$packet->getUrl()}}">(show)</a>

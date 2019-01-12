@@ -23,7 +23,7 @@ class Packet extends Model
 	protected $dates = [
 		'last_submitted',
 	];
-	
+
   protected $fillable = [
     'status_table_id',
 		'health_table_id',
@@ -210,7 +210,8 @@ class Packet extends Model
 	}
 
 	public function getPayloadType() {
-		return Packet::$payloads[$this->type]['class'];
+		$type = (isset(Packet::$payloads[$this->type]))?Packet::$payloads[$this->type]['class']:false;
+		return $type;
 	}
 
 	public function payloadAsArray() {

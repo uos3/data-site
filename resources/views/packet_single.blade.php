@@ -8,7 +8,13 @@
 	<div class="c-left-text">
 		<h2>Packet: {{$packet->id}}</h2>
 		<p>
-			<strong>payload type:</strong> {{$packet->getPayloadType()}}<br />
+			<?php
+				$payload_name = $packet->getPayloadType();
+				if (!$payload_name) {
+					$payload_name = "?";
+				}
+			?>
+			<strong>payload type:</strong> {{$payload_name}}<br />
 			<strong>last submitted:</strong> {{$packet->last_submitted}}<br />
 			<strong>submitted by:</strong> {{$packet->getPublicSubmitters()}}
 		</p>
@@ -24,8 +30,9 @@
 				<?php
 				$packet_array = $packet->toArray();
 				$status = $packet_array['sat_status'];
+				$status['rails_status'] = implode($status['rails_status'],",");
 				?>
-				Last update: {{$packet->sat_status->downlink_time}}
+				<strong>Last update:</strong> {{$packet->sat_status->time}}
 			</p>
 			<table class="table">
 				<thead>
@@ -53,36 +60,41 @@
 
 		</div>
 		<div class="c-data-card">
-			<h2>Payload: {{$packet->getPayloadType()}}</h2>
-			<p>
-				&nbsp;
-			</p>
-			<?php
-			$payload = $packet->payloadAsArray();
-			?>
-			<table class="table">
-				<thead>
-					<tr>
-						<th>
-							Key
-						</th>
-						<th>
-							Value
-						</th>
-					</tr>
-				</thead>
-				@foreach ($payload as $key => $value)
-					<tr>
-						<td>
-							{{$key}}
-						</td>
-						<td>
-							{{$value}}
-						</td>
-					</tr>
-				@endforeach
+			<h2>Payload</h2>
+			@if ($packet->getPayloadType())
+				<?php
+				$payload = $packet->payloadAsArray();
+				?>
+				<p><strong>Payload type:</strong> {{$packet->getPayloadType()}}</p>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>
+								Key
+							</th>
+							<th>
+								Value
+							</th>
+						</tr>
+					</thead>
+					@foreach ($payload as $key => $value)
+						<tr>
+							<td>
+								{{$key}}
+							</td>
+							<td>
+								{{$value}}
+							</td>
+						</tr>
+					@endforeach
 
-			</table>
+				</table>
+			@else
+				<div class="error">
+					This packet is malformed - no payload found.
+				</div>
+			@endif
+
 
 
 		</div>
