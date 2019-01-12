@@ -18,7 +18,7 @@ class PagesController extends Controller {
 
 	public function home() {
 		//\Session::flash('status','Noot noot!'); //'flashes' (=shows only once) a notification through the Session ()
-		$packets = Packet::orderBy('id', 'desc')->take(10)->get();
+		$packets = Packet::orderBy('last_submitted', 'desc')->take(10)->get();
 		return view('home')->with([
 			'packets'=>$packets,
 			'payloads'=>Packet::$payloads,
@@ -30,7 +30,7 @@ class PagesController extends Controller {
 	}
 
 	public function packets() {
-		$packets = Packet::orderBy('id', 'desc')->paginate(50);
+		$packets = Packet::orderBy('last_submitted', 'desc')->paginate(50);
 		return view('packets')->with([
 			'packets'=>$packets,
 			'payloads'=>Packet::$payloads,

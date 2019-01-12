@@ -64,8 +64,8 @@ class SatStatus extends Model
 	public function getRailsStatusAttribute($rails_string) {
 		$rails_array = [];
 
-		for ($i = 0; $i<strlen($str); $i++) {
-			$rails_array[] = (boolval($str[$i])); //converts "0" to FALSE and "1" to TRUE
+		for ($i = 0; $i<strlen($rails_string); $i++) {
+			$rails_array[] = (boolval($rails_string[$i])); //converts "0" to FALSE and "1" to TRUE
 		};
 		return $rails_array;
 	}

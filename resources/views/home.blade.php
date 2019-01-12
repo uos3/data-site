@@ -57,7 +57,7 @@
 				@foreach ($packets as $packet)
 					<?php
 						$packet->sat_status();
-						$payload_name = $payloads[$packet->payload_type]['name'];
+						$payload_name = $payloads[$packet->type]['name'];
 			 		?>
 					<tr>
 						<td>
@@ -83,6 +83,7 @@
 				$last_packet->sat_status();
 				$last_as_array = $last_packet->toArray();
 				$status = $last_as_array['sat_status'];
+				$status['rails_status'] = implode($status['rails_status'],",");
 				?>
 				Last update: {{$last_packet->sat_status->downlink_time}}
 			</p>
