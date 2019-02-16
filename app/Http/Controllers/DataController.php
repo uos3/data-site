@@ -235,6 +235,10 @@ class DataController extends Controller
         return response("Invalid payload type.",400);
       }
 
+      if (!$data['crc'] || !$data['hash']) {
+        return response("Checksum or hash missing.",400);
+      }
+
       //what do I need?
       //the payload, for saving
       //the beacon_id

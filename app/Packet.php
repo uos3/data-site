@@ -166,10 +166,9 @@ class Packet extends Model
 		// payload type
 		// dataset_id (previously [payloadtype]_sequence_id)
 		// checksum
-		//
-		$last_valid = Carbon::now()->subHours(12)->toDateTimeString();
 
-		$packet = Packet::whereDate('last_submitted','<',$last_valid)
+		$last_valid = Carbon::now()->subHours(12)->toDateTimeString();
+		$packet = Packet::whereDate('last_submitted','>',$last_valid)
 			->where('beacon_id',$beacon_id)
 			->where('type',$type)
 			->where('dataset_id',$dataset_id)
