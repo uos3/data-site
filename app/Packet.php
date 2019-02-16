@@ -196,7 +196,7 @@ class Packet extends Model
 			->orderBy('last_submitted', 'desc')
 			->first();
 		} else {
-			$packet =  Packet::with('sat_config','sat_status','sat_health','sat_gps','sat_imu','sat_img')
+			$packet =  Packet::with('sat_status',Packet::$payloads[$type]['name'])
 			->where('type',$type)
 			->orderBy('last_submitted', 'desc')
 			->first();

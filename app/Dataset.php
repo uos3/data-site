@@ -13,7 +13,6 @@ use Exception;
 
 class Dataset {
   public $packets = [
-    'sat_status'=>[],
     'sat_config'=>[],
     'sat_health'=>[],
     'sat_gps'=>[],
@@ -21,14 +20,24 @@ class Dataset {
     'sat_imu'=>[],
   ];
 
+  public $sat_status = [];
+
   public function __construct() {
+    $latest_submit = NULL;
     foreach (Packet::$payloads as $p_key=>$p_info) {
-      $this->packets[$p_info['name']] = Packet::last($p_key);
+      $packet = Packet::last($p_key);
+      $this->packets[$p_info['name']] = $packet;
+      if ($latest_submit === NULL || $packet->last_submitted > $latest_submit) {
+        error_log("latest submit larger");
+        $this->sat_status = $packet->sat_status;
+        $latest_submit = $packet->last_submitted;
+      }
     }
   }
 
   public function toArray() {
     $output = [];
+    $output['sat_status'] = $this->sat_status;
     foreach ($this->packets as $payload_type_name=>$packet) {
       if (!$packet) {
         $output[$payload_type_name] = [];
@@ -41,7 +50,7 @@ class Dataset {
           $output[$payload_type_name] = $payload->toArray();
         }
       }
-    }
+    }    
     return $output;
   }
 
