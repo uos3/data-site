@@ -26,7 +26,7 @@
 		<div class="c-data-card">
 			<h2>Sat status</h2>
 			<p>
-				<strong>Last update:</strong> {{$sat_status['time']}}
+				<strong>Last update:</strong> {{$last_status_update}}
 			</p>
 			<table class="table">
 				<thead>

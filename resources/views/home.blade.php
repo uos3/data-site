@@ -32,13 +32,10 @@
 				Uh oh, no packets found in the database.
 			</div>
 		@else
-		<?php
-			$last_packet = $packets->first();
-		?>
 		<div class="c-data-card">
 			<h2>Last packets</h2>
 			<p>
-				Last submission time: {{$last_packet->last_submitted}}
+				Last submission time: {{$last_submitted}}
 			</p>
 			<table class="table">
 				<thead>
@@ -90,13 +87,7 @@
 		<div class="c-data-card">
 			<h2>Sat status</h2>
 			<p>
-				<?php
-				$last_packet->sat_status();
-				$last_as_array = $last_packet->toArray();
-				$status = $last_as_array['sat_status'];
-				$status['rails_status'] = implode($status['rails_status'],",");
-				?>
-				Last update: {{$last_packet->sat_status->time}}
+				Last update: {{$last_status_update}}
 			</p>
 			<table class="table">
 				<thead>
@@ -109,7 +100,7 @@
 						</th>
 					</tr>
 				</thead>
-				@foreach ($status as $key => $value)
+				@foreach ($last_status as $key => $value)
 					<tr>
 						<td>
 							{{$key}}

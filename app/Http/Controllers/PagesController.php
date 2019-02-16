@@ -25,14 +25,29 @@ class PagesController extends Controller {
 		return "[".implode($text_array,", ")."]";
 	}
 
+	public function unixEpochToTime($timestamp) {
+		return date("Y-m-d H:i:s", substr($timestamp, 0, 10));
+	}
 
 	public function home() {
 		//\Session::flash('status','Noot noot!'); //'flashes' (=shows only once) a notification through the Session ()
 		$packets = Packet::orderBy('last_submitted', 'desc')->take(10)->get();
-		return view('home')->with([
+		$last_packet = $packets->first();
+		$last_packet->sat_status();
+
+		$values = [
 			'packets'=>$packets,
+			'last_submitted' => $last_packet->last_submitted,
 			'payloads'=>Packet::$payloads,
-		]);
+			'last_status' => $last_packet->sat_status->toArray(),
+			'last_status_update' =>$this->unixEpochToTime($last_packet->sat_status->time),
+		];
+
+		$values['last_status']['rails_status'] = $this->railsArrayToText($values['last_status']['rails_status']);
+
+		return view('home')->with($values);
+
+
 	}
 
 	public function satellite_info() {
@@ -56,6 +71,7 @@ class PagesController extends Controller {
 			'public_submitters' => $packet->getPublicSubmitters(),
 			'payload_type_name' => $packet->getPayloadType(),
 			'sat_status' => $packet->sat_status->toArray(),
+			'last_status_update' =>$this->unixEpochToTime($packet->sat_status->time),
 			'payload' => $packet->payloadAsArray(),
 		];
 		$values['sat_status']['rails_status'] = $this->railsArrayToText($values['sat_status']['rails_status']);
