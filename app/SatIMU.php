@@ -14,17 +14,18 @@ class SatIMU extends Model
      */
 
   protected $fillable = [
-'dataset_id',
-'timestamp',
-'mag_x',
-'mag_y',
-'mag_z',
-'gyro_x',
-'gyro_y',
-'gyro_z',
-'accel_x',
-'accel_y',
-'accel_z',
+		'packet_id',
+		'dataset_id',
+		'timestamp',
+		'mag_x',
+		'mag_y',
+		'mag_z',
+		'gyro_x',
+		'gyro_y',
+		'gyro_z',
+		'accel_x',
+		'accel_y',
+		'accel_z',
   ];
 
 	protected $hidden = [

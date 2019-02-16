@@ -19,16 +19,18 @@ class SatStatus extends Model
 	];
 
 	protected $fillable = [
-		'downlink_time',
+		'packet_id',
+		'beacon_id',
+		'spacecraft_id',
 		'time',
 		'time_source',
-		'spacecraft_id',
+		'downlink_time',
 		'obc_temperature',
 		'battery_temperature',
 		'battery_voltage',
 		'battery_current',
-		'charge_current',
 		'antenna_deployment',
+		'operational_mode',
 		'data_pending',
 		'reboot_count',
 		'rails_status',
@@ -36,13 +38,10 @@ class SatStatus extends Model
 		'tx_temperature',
 		'pa_temperature',
 		'rx_noisefloor',
-		'beacon_id',
-		'packet_id',
 	];
 
 	protected $hidden = [
 		'packet_id',
-
 	];
 
 	public $timestamps = false; //needed because I'm not using the default timestamp columns (updated_at, created_at), and otherwise php artisan tinker craps itself.

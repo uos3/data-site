@@ -15,12 +15,13 @@ class SatIMG extends Model
      */
 
   protected $fillable = [
-'dataset_id',
-'timestamp',
-'image_id',
-'fragment_id',
-'number_of_fragments',
-'image_data',
+		'packet_id',
+		'dataset_id',
+		'timestamp',
+		'image_id',
+		'fragment_id',
+		'number_of_fragments',
+		'image_data',
   ];
 
 	protected $hidden = [
