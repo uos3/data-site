@@ -14,17 +14,12 @@ class SatStatus extends Model
      * @var array
      */
 
-	protected $dates = [
-		'time'
-	];
-
 	protected $fillable = [
 		'packet_id',
 		'beacon_id',
 		'spacecraft_id',
 		'time',
 		'time_source',
-		'downlink_time',
 		'obc_temperature',
 		'battery_temperature',
 		'battery_voltage',
@@ -53,12 +48,7 @@ class SatStatus extends Model
 		return $this->belongsTo('App\Packet');
 	}
 
-	/**
-	 * Laravel Accessor (automatically runs when retrieving data from DB).
-	 * @param  String $rails_string Six-character string of "0" and "1".
-	 * @return Array               Array of true/false values.
-	 */
-	public function getRailsStatusAttribute($rails_string) {
+	public function railsStringToArray($rails_string) {
 		$rails_array = [];
 
 		for ($i = 0; $i<strlen($rails_string); $i++) {
@@ -66,17 +56,30 @@ class SatStatus extends Model
 		};
 		return $rails_array;
 	}
+
+	public function railsArrayToString($rails_array) {
+		$rails_string = '';
+		foreach ($rails_array as $key => $value) {
+			$rails_string.= ($value)?"1":"0";
+		}
+		return $rails_string;
+	}
+
+	/**
+	 * Laravel Accessor (automatically runs when retrieving data from DB).
+	 * @param  String $rails_string Six-character string of "0" and "1".
+	 * @return Array               Array of true/false values.
+	 */
+	public function getRailsStatusAttribute($rails_string) {
+		return $this->railsStringToArray($rails_string);
+	}
 	/**
 	 * Laravel Mutator (automatically runs when saving into DB).
 	 * @param Array $rails_array Array of true/false values.
 	 * @return String Six-character string of "0" and "1".
 	 */
 	public function setRailsStatusAttribute($rails_array) {
-		$rails_string = '';
-		foreach ($rails_array as $key => $value) {
-			$rails_string.= ($value)?"1":"0";
-		}
-		return $rails_string;
+		$this->attributes['rails_status'] = $this->railsArrayToString($rails_array);
 	}
 
 

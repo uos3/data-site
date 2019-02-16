@@ -267,9 +267,8 @@ class DataController extends Controller
           ]);
 
 
-          //add packet_id & downlink_time to status data
+          //add packet_id to status data
           $status_data = $data['status'];
-          error_log(print_r($status_data,true));
           $status_data['packet_id'] = $new_packet->id;
 
           //save status data

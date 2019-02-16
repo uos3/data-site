@@ -135,7 +135,7 @@ class SatHealth extends Model
 	 * @return String Six-character string of "0" and "1".
 	 */
 	public function setRailsSwitchStatusAttribute($rails_array) {
-		return $this->railsArrayToString($rails_array);
+		$this->attributes['rails_switch_status'] = $this->railsArrayToString($rails_array);
 	}
 
 	public function getRailsOvercurrentStatusAttribute($rails_string) {
@@ -143,7 +143,7 @@ class SatHealth extends Model
 	}
 
 	public function setRailsOvercurrentStatusAttribute($rails_array) {
-		return $this->railsArrayToString($rails_array);
+		$this->attributes['rails_overcurrent_status'] = $this->railsArrayToString($rails_array);
 	}
 
 }
