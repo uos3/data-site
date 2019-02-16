@@ -168,7 +168,14 @@ class Packet extends Model
 		// checksum
 
 		$last_valid = Carbon::now()->subHours(12)->toDateTimeString();
-		$packet = Packet::whereDate('last_submitted','>',$last_valid)
+		//
+		// error_log("type: ".$type);
+		// error_log("beacon id: ".$beacon_id);
+		// error_log("dataset id: ".$dataset_id);
+		// error_log("crc: ".$crc);
+		// error_log("last valid: ".$last_valid);
+
+		$packet = Packet::where('last_submitted','>',$last_valid)
 			->where('beacon_id',$beacon_id)
 			->where('type',$type)
 			->where('dataset_id',$dataset_id)
