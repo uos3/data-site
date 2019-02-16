@@ -4,6 +4,8 @@
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Packet;
+use App\SatStatus;
+use App\SatHealth;
 
 /**
  *
@@ -13,6 +15,14 @@ class PagesController extends Controller {
 	public function __construct() {
 		//$this->middleware('guest'); //this 'restricts' the page (or, well, all of the refined ones below) only to logged-out users
 		//CAUTION:if this is used on a page where the login form redirects after a successful login, it creates a redirect loop!
+	}
+
+	public function railsArrayToText($rails_array) {
+		$text_array = [];
+		foreach($rails_array as $key=>$value) {
+			$text_array[] = ($value)?"true":"false";
+		}
+		return "[".implode($text_array,", ")."]";
 	}
 
 
@@ -40,12 +50,25 @@ class PagesController extends Controller {
 	public function packet_single($id) {
 		$packet = Packet::with('sat_config','sat_status','sat_health','sat_gps','sat_imu','sat_img')->findOrFail($id);
 
+		$values = [
+			'packet_id' => $packet->id,
+			'last_submitted' => $packet->last_submitted,
+			'public_submitters' => $packet->getPublicSubmitters(),
+			'payload_type_name' => $packet->getPayloadType(),
+			'sat_status' => $packet->sat_status->toArray(),
+			'payload' => $packet->payloadAsArray(),
+		];
+		$values['sat_status']['rails_status'] = $this->railsArrayToText($values['sat_status']['rails_status']);
+
+		if ($packet->type == Packet::P_HEALTH) {
+			$values['payload']['rails_switch_status'] = $this->railsArrayToText($values['payload']['rails_switch_status']);
+		$values['payload']['rails_overcurrent_status'] = $this->railsArrayToText($values['payload']['rails_overcurrent_status'] );
+		}
+
+
 		//if not found, error, 404
 		//if found, show
-		return view('packet_single')->with([
-			'packet'=>$packet,
-			'payloads'=>Packet::$payloads,
-		]);
+		return view('packet_single')->with($values);
 	}
 
 	public function about() {

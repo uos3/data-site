@@ -6,17 +6,16 @@
 
 <div class="l-page-content">
 	<div class="c-left-text">
-		<h2>Packet: {{$packet->id}}</h2>
+		<h2>Packet: {{$packet_id}}</h2>
 		<p>
 			<?php
-				$payload_name = $packet->getPayloadType();
-				if (!$payload_name) {
-					$payload_name = "?";
+				if (!$payload_type_name) {
+					$payload_type_name = "?";
 				}
 			?>
-			<strong>payload type:</strong> {{$payload_name}}<br />
-			<strong>last submitted:</strong> {{$packet->last_submitted}}<br />
-			<strong>submitted by:</strong> {{$packet->getPublicSubmitters()}}
+			<strong>payload type:</strong> {{$payload_type_name}}<br />
+			<strong>last submitted:</strong> {{$last_submitted}}<br />
+			<strong>submitted by:</strong> {{$public_submitters}}
 		</p>
 	</div>
 	<div class="l-data-pane">
@@ -27,12 +26,7 @@
 		<div class="c-data-card">
 			<h2>Sat status</h2>
 			<p>
-				<?php
-				$packet_array = $packet->toArray();
-				$status = $packet_array['sat_status'];
-				$status['rails_status'] = implode($status['rails_status'],",");
-				?>
-				<strong>Last update:</strong> {{$packet->sat_status->time}}
+				<strong>Last update:</strong> {{$sat_status['time']}}
 			</p>
 			<table class="table">
 				<thead>
@@ -45,7 +39,7 @@
 						</th>
 					</tr>
 				</thead>
-				@foreach ($status as $key => $value)
+				@foreach ($sat_status as $key => $value)
 					<tr>
 						<td>
 							{{$key}}
@@ -61,11 +55,10 @@
 		</div>
 		<div class="c-data-card">
 			<h2>Payload</h2>
-			@if ($packet->getPayloadType())
+			@if ($payload_type_name)
 				<?php
-				$payload = $packet->payloadAsArray();
 				?>
-				<p><strong>Payload type:</strong> {{$packet->getPayloadType()}}</p>
+				<p><strong>Payload type:</strong> {{$payload_type_name}}</p>
 				<table class="table">
 					<thead>
 						<tr>
