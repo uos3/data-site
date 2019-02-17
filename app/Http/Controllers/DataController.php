@@ -140,13 +140,15 @@ class DataController extends Controller
         throw new Exception("The telemetry app output is not valid JSON and couldn't be decoded.");
       }
 
+      $data = $output['p'];
+      //fault of the Cereal library (in telemetry_app).
+
       //TODO Maybe this could be done with Laravel validators?
-      if (!array_key_exists('type',$output)) {
+      if (!array_key_exists('type',$data)) {
         throw new Exception("Decoded JSON doesn't contain expected keys: 'type'.");
       }
 
-      return $output;
-      //??? peculiarity of the telemetry app output.
+      return $data;
     }
 
     /**
